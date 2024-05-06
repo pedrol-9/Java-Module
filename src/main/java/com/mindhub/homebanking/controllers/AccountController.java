@@ -1,12 +1,8 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.DTOs.AccountDTO;
-import com.mindhub.homebanking.DTOs.ClientDTO;
-import com.mindhub.homebanking.DTOs.TrxDTO;
 import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,24 +23,24 @@ public class AccountController {
     private AccountRepository accountRepository;
 
     @GetMapping("/")
-    public ResponseEntity<List<AccountDTO>> getAllAccounts(){
+    public ResponseEntity<?> getAllAccounts(){
         List<AccountDTO> accountDTOs = accountRepository.findAll().stream().map(AccountDTO::new)
                 .collect(toList());
 
         if (!accountDTOs.isEmpty()) {
         return new ResponseEntity<>(accountDTOs, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("There're no accounts to display", HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDTO> getClients(@PathVariable Long id) {
+    public ResponseEntity<?> getClients(@PathVariable Long id) {
 
         Account account = accountRepository.findById(id).orElse(null);
 
         if (account == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Account Not Found", HttpStatus.NOT_FOUND);
         }
 
         AccountDTO accountDTO = new AccountDTO(account);

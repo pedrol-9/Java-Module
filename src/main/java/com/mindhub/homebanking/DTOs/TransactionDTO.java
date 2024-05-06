@@ -6,7 +6,7 @@ import com.mindhub.homebanking.models.TransactionType;
 
 import java.time.LocalDateTime;
 
-public class TrxDTO {
+public class TransactionDTO {
 
     private long id;
     private TransactionType type;
@@ -16,7 +16,7 @@ public class TrxDTO {
     private Account account;
 
     //builder
-    public TrxDTO(Transaction transaction) {
+    public TransactionDTO(Transaction transaction) {
         this.id = transaction.getId();
         this.type = transaction.getType();
         this.amount = transaction.getAmount();

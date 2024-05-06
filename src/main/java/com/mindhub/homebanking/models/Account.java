@@ -13,7 +13,9 @@ public class Account {
     private long id;
 
     private String number;
+
     private LocalDate creationDate;
+
     private double balance;
 
     @ManyToOne(fetch = FetchType.EAGER)

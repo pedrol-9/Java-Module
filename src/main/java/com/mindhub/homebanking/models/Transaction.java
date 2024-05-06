@@ -13,8 +13,11 @@ public class Transaction {
     private long id;
 
     private TransactionType type;
+
     private double amount;
+
     private String description;
+
     private LocalDateTime date;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -9,7 +9,7 @@ import com.mindhub.homebanking.models.Transaction;
 import com.mindhub.homebanking.models.TransactionType;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.repositories.TrxRespository;
+import com.mindhub.homebanking.repositories.TransactionRespository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,7 +24,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData (ClientRepository clientRepository, AccountRepository accountRepository, TrxRespository trxRespository) {
+	public CommandLineRunner initData (ClientRepository clientRepository, AccountRepository accountRepository, TransactionRespository trxRespository) {
 		return (args) -> {
 			System.out.println("Hola");
 

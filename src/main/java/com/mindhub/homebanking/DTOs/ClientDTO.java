@@ -8,10 +8,15 @@ import java.util.stream.Collectors;
 import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
 
 public class ClientDTO {
+
     private long id;
+
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     Set<AccountDTO> accounts;
 
     // special builder
