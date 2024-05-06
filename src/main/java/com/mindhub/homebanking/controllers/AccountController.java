@@ -31,7 +31,11 @@ public class AccountController {
         List<AccountDTO> accountDTOs = accountRepository.findAll().stream().map(AccountDTO::new)
                 .collect(toList());
 
+        if (!accountDTOs.isEmpty()) {
         return new ResponseEntity<>(accountDTOs, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/{id}")

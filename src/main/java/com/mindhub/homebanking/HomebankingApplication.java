@@ -30,20 +30,17 @@ public class HomebankingApplication {
 
 			// Client intances
 			Client melba = new Client("Melba", "Morel", "melba@mindhub.com");
-			Client leonel = new Client("Leonel", "Borjas", "leonel@borjas.com");
 			Client matrona = new Client("Matrona", "Mandona", "matron@mandona.com");
 
+			// Account instances
 			LocalDate today = LocalDate.now();
 			LocalDate tomorrow = today.plusDays(1);
 
-			// Account instances
 			Account account1 = new Account("VIN001", today, 5000.00);
 			Account account2 = new Account("VIN002", tomorrow, 7500.00);
 			Account account3 = new Account("VIN003", today, 2500.00);
 			Account account4 = new Account("VIN004", today, 2900.00);
-			Account account5 = new Account("VIN005", today, 9500.00);
-			Account account6 = new Account("VIN006", tomorrow, 10800.00);
-			Account account7 = new Account("VIN007", tomorrow, 20000.00);
+
 
 			// Transaction instances
 			Transaction trx1 = new Transaction(TransactionType.DEBIT, 120.52, "coffee_Walla", LocalDateTime.now());
@@ -54,34 +51,39 @@ public class HomebankingApplication {
 			Transaction trx6 = new Transaction(TransactionType.CREDIT, 15.00, "onlyFans", LocalDateTime.now());
 			Transaction trx7 = new Transaction(TransactionType.CREDIT, 14.20, "GooglePlay", LocalDateTime.now());
 			Transaction trx8 = new Transaction(TransactionType.CREDIT, 18.20, "GooglePlay", LocalDateTime.now());
+			Transaction trx9 = new Transaction(TransactionType.CREDIT, 180.21, "Domino's_Pizza", LocalDateTime.now());
+			Transaction trx10 = new Transaction(TransactionType.CREDIT, 500.00, "Tyba_APP", LocalDateTime.now());
+			Transaction trx11 = new Transaction(TransactionType.CREDIT, 10.00, "PrimeVideo", LocalDateTime.now());
+			Transaction trx12 = new Transaction(TransactionType.CREDIT, 12.00, "HBO_Max", LocalDateTime.now());
+			Transaction trx13 = new Transaction(TransactionType.CREDIT, 18.00, "DisneyPlus", LocalDateTime.now());
+			Transaction trx14 = new Transaction(TransactionType.CREDIT, 18.20, "GooglePlay", LocalDateTime.now());
+			Transaction trx15 = new Transaction(TransactionType.CREDIT, 152.25, "Ziru's_Pizza", LocalDateTime.now());
+			Transaction trx16 = new Transaction(TransactionType.CREDIT, 75.08, "Cinemark_Col", LocalDateTime.now());
 
 			// Assigner Method:
 			melba.addAccount(account1);
 			melba.addAccount(account2);
-			leonel.addAccount(account3);
-			leonel.addAccount(account4);
-			leonel.addAccount(account5);
-			matrona.addAccount(account6);
-			matrona.addAccount(account7);
+			matrona.addAccount(account3);
+			matrona.addAccount(account4);
 			account1.addTrx(trx1);
-			account1.addTrx(trx8);
-			account2.addTrx(trx2);
-			account3.addTrx(trx3);
-			account4.addTrx(trx4);
-			account5.addTrx(trx5);
-			account6.addTrx(trx6);
-			account7.addTrx(trx7);
+			account1.addTrx(trx2);
+			account1.addTrx(trx3);
+			account2.addTrx(trx4);
+			account2.addTrx(trx5);
+			account2.addTrx(trx6);
+			account3.addTrx(trx7);
+			account3.addTrx(trx8);
+			account3.addTrx(trx9);
+			account4.addTrx(trx10);
+			account4.addTrx(trx11);
+			account4.addTrx(trx12);
 
 			clientRepository.save(melba);
-			clientRepository.save(leonel);
 			clientRepository.save(matrona);
 			accountRepository.save(account1);
 			accountRepository.save(account2);
 			accountRepository.save(account3);
 			accountRepository.save(account4);
-			accountRepository.save(account5);
-			accountRepository.save(account6);
-			accountRepository.save(account7);
 			trxRespository.save(trx1);
 			trxRespository.save(trx2);
 			trxRespository.save(trx3);
@@ -90,9 +92,12 @@ public class HomebankingApplication {
 			trxRespository.save(trx6);
 			trxRespository.save(trx7);
 			trxRespository.save(trx8);
+			trxRespository.save(trx9);
+			trxRespository.save(trx10);
+			trxRespository.save(trx11);
+			trxRespository.save(trx12);
 
 			System.out.println(melba);
-			System.out.println(leonel);
 			System.out.println(matrona);
 		};
 	}
