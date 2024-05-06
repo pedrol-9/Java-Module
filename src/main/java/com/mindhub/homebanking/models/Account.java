@@ -1,9 +1,9 @@
 package com.mindhub.homebanking.models;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
-
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Account {
@@ -19,6 +19,9 @@ public class Account {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="owner_id")
     private Client client;
+
+    @OneToMany(mappedBy="account", fetch= FetchType.EAGER)
+    Set<Transaction> transactions = new HashSet<Transaction>();
 
     // builders
     public Account() {
@@ -59,6 +62,16 @@ public class Account {
         this.client = client;
     }
 
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    // método asignador de trx
+    public void addTrx(Transaction transaction) {
+        transactions.add(transaction);
+        transaction.setAccount(this);
+    }
+
     // toString
     @Override
     public String toString() {
@@ -69,6 +82,4 @@ public class Account {
                 ", balance=" + balance +
                 '}';
     }
-
-
 }

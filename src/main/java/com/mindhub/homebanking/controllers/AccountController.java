@@ -1,7 +1,11 @@
 package com.mindhub.homebanking.controllers;
 
+import com.mindhub.homebanking.DTOs.AccountDTO;
 import com.mindhub.homebanking.DTOs.ClientDTO;
+import com.mindhub.homebanking.DTOs.TrxDTO;
+import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,35 +16,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
 @RestController
-@RequestMapping("/api/clients")
-public class ClientController {
+@RequestMapping("/api/accounts")
+public class AccountController {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private AccountRepository accountRepository;
 
     @GetMapping("/")
-    public ResponseEntity<List<ClientDTO>> getAllClients() {
-        List<ClientDTO> clientDTOs = clientRepository.findAll().stream().map(ClientDTO::new)
+    public ResponseEntity<List<AccountDTO>> getAllAccounts(){
+        List<AccountDTO> accountDTOs = accountRepository.findAll().stream().map(AccountDTO::new)
                 .collect(toList());
 
-        return new ResponseEntity<>(clientDTOs, HttpStatus.OK);
+        return new ResponseEntity<>(accountDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClientDTO> getClients(@PathVariable Long id) {
-        Client client = clientRepository.findById(id).orElse(null);
+    public ResponseEntity<AccountDTO> getClients(@PathVariable Long id) {
 
-        if (client == null) {
+        Account account = accountRepository.findById(id).orElse(null);
+
+        if (account == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        ClientDTO clientDTO = new ClientDTO(client);
+        AccountDTO accountDTO = new AccountDTO(account);
 
-        return new ResponseEntity<>(clientDTO, HttpStatus.OK);
+        return new ResponseEntity<>(accountDTO, HttpStatus.OK);
     }
 }
