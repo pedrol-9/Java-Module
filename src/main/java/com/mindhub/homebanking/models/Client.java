@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Client {
@@ -95,6 +96,8 @@ public class Client {
         clientLoan.setClient(this);
         clientLoans.add(clientLoan);
     }
+
+    public List<Loan> getLoans() {return this.clientLoans.stream().map(clientLoan -> clientLoan.getLoan()).toList();}
 
     @Override
     public String toString() {

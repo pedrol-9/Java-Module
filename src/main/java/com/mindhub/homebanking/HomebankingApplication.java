@@ -39,7 +39,6 @@ public class HomebankingApplication {
 			Account account3 = new Account("VIN003", today, 2500.00);
 			Account account4 = new Account("VIN004", today, 2900.00);
 
-
 			// Transaction instances
 			Transaction trx1 = new Transaction(TransactionType.DEBIT, 120.52, "coffee_Walla", LocalDateTime.now());
 			Transaction trx2 = new Transaction(TransactionType.CREDIT, 80.57, "store_purchase", LocalDateTime.now());
@@ -133,6 +132,12 @@ public class HomebankingApplication {
 			// printing objects in the console
 			System.out.println(melba);
 			System.out.println(matrona);
+
+			List<Loan> melbaLoan = melba.getLoans();
+			System.out.println(melbaLoan);
+
+			List<Client> mortgageLoanClients = mortgageLoan.getClients();
+			System.out.println(mortgageLoanClients);
 		};
 	}
 }

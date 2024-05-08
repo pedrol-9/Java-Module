@@ -1,11 +1,8 @@
 package com.mindhub.homebanking.models;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Loan {
@@ -79,5 +76,18 @@ public class Loan {
     public void addClientLoan(ClientLoan clientLoan) {
         clientLoan.setLoan(this);
         clientLoans.add(clientLoan);
+    }
+
+    public List<Client> getClients() {
+        return this.clientLoans.stream().map(clientLoan -> clientLoan.getClient()).toList();
+    }
+
+    @Override
+    public String toString() {
+        return "Loan{" +
+                "id=" + id +
+                ", loanName='" + loanName + '\'' +
+                ", maxAmount=" + maxAmount +
+                '}';
     }
 }
