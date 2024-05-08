@@ -3,7 +3,9 @@ package com.mindhub.homebanking.models;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Loan {
@@ -19,6 +21,9 @@ public class Loan {
     @ElementCollection
     @Column(name="Payments")
     private List<Integer> payments = new ArrayList<>();
+
+    @OneToMany(mappedBy="loan")
+    private Set<ClientLoan> clientLoans = new HashSet<>();
 
     //builders
     public Loan(String loanName, double maxAmount, List<Integer> payments) {
@@ -63,8 +68,21 @@ public class Loan {
         this.payments = payments;
     }
 
+    public Set<ClientLoan> getClientLoans() {
+        return clientLoans;
+    }
+
+    public void setClientLoans(Set<ClientLoan> clientLoans) {
+        this.clientLoans = clientLoans;
+    }
+
+    public void addClientLoan(ClientLoan clientLoan) {
+        clientLoan.setLoan(this);
+        clientLoans.add(clientLoan);
+    }
+
     // toString Method
-    @Override
+    /*@Override
     public String toString() {
         return "Loans{" +
                 "id=" + id +
@@ -72,7 +90,5 @@ public class Loan {
                 ", maxAmount=" + maxAmount +
                 ", payments=" + payments +
                 '}';
-    }
-
-
+    }*/
 }
