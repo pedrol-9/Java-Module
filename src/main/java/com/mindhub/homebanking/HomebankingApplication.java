@@ -64,11 +64,6 @@ public class HomebankingApplication {
 			Loan automotiveLoan = new Loan("Automotive", 300000, automotivePayments);
 
 			// ClientLoan instances
-			/*<Integer> installment60 = new ArrayList<>(List.of(60));
-			ArrayList<Integer> installment12 = new ArrayList<>(List.of(12));
-			ArrayList<Integer> installment24 = new ArrayList<>(List.of(24));
-			ArrayList<Integer> installment36 = new ArrayList<>(List.of(36));*/
-
 			ClientLoan clientLoan1 = new ClientLoan(400000.00, 60);
 			ClientLoan clientLoan2 = new ClientLoan(50000.00,12);
 			ClientLoan clientLoan3 = new ClientLoan(100000.00, 24);
@@ -93,12 +88,15 @@ public class HomebankingApplication {
 			account4.addTrx(trx11);
 			account4.addTrx(trx12);
 
+			mortgageLoan.addClientLoan(clientLoan1);
+			personalLoan.addClientLoan(clientLoan2);
+			automotiveLoan.addClientLoan(clientLoan3);
+			automotiveLoan.addClientLoan(clientLoan4);
+
 			melba.addClientLoan(clientLoan1);
 			melba.addClientLoan(clientLoan2);
 			melba.addClientLoan(clientLoan3);
-			mortgageLoan.addClientLoan(clientLoan3);
-			personalLoan.addClientLoan(clientLoan4);
-			automotiveLoan.addClientLoan(clientLoan4);
+			melba.addClientLoan(clientLoan4);
 
 			// Send objects to DB:
 			clientRepository.save(melba);
@@ -130,6 +128,7 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan2);
 			clientLoanRepository.save(clientLoan3);
 			clientLoanRepository.save(clientLoan4);
+
 
 			// printing objects in the console
 			System.out.println(melba);
