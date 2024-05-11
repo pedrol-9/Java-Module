@@ -79,7 +79,7 @@ public class Loan {
     }
 
     public List<Client> getClients() {
-        return this.clientLoans.stream().map(clientLoan -> clientLoan.getClient()).toList();
+        return this.clientLoans.stream().map(ClientLoan::getClient).toList();
     }
 
     @Override

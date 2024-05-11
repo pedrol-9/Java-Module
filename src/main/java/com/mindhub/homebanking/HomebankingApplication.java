@@ -21,7 +21,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData (ClientRepository clientRepository, AccountRepository accountRepository, TransactionRespository transactionRespository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository) {
+	public CommandLineRunner initData (ClientRepository clientRepository, AccountRepository accountRepository, TransactionRespository transactionRespository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		return (args) -> {
 
 			System.out.println("Hola");
@@ -67,6 +67,15 @@ public class HomebankingApplication {
 			ClientLoan clientLoan2 = new ClientLoan(50000.00,12);
 			ClientLoan clientLoan3 = new ClientLoan(100000.00, 24);
 			ClientLoan clientLoan4 = new ClientLoan(200000.00, 36);
+
+			// Card Instances
+			Card goldCard = new Card(melba, CardType.DEBIT, CardColor.GOLD, "8452-5896-6658-8558", 103, LocalDate.now().plusYears(5), LocalDate.now());
+			Card silverCard = new Card(melba, CardType.CREDIT, CardColor.SILVER, "4123-2589-9632-1478", 213, LocalDate.now().plusYears(5), LocalDate.now().minusDays(2));
+			Card titaniumCard = new Card(matrona, CardType.CREDIT, CardColor.TITANIUM, "1120-0258-0058-1003", 521, LocalDate.now().plusYears(5), LocalDate.now().minusDays(4));
+
+			melba.addCard(goldCard);
+			melba.addCard(silverCard);
+			matrona.addCard(titaniumCard);
 
 			// Assigner Method:
 			melba.addAccount(account1);
@@ -128,6 +137,9 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan3);
 			clientLoanRepository.save(clientLoan4);
 
+			cardRepository.save(goldCard);
+			cardRepository.save(silverCard);
+			cardRepository.save(titaniumCard);
 
 			// printing objects in the console
 			System.out.println(melba);

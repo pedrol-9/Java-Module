@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 public class Client {
@@ -26,6 +25,9 @@ public class Client {
 
     @OneToMany(mappedBy="client")
     private List<ClientLoan> clientLoans = new ArrayList<>();
+
+    @OneToMany(mappedBy="client")
+    private List<Card> cards = new ArrayList<>();
 
     // builder
     public Client(String firstName, String lastName, String email) {
@@ -86,15 +88,30 @@ public class Client {
         this.clientLoans = clientLoans;
     }
 
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
     // método asignador de cuentas
     public void addAccount(Account account) {
         account.setClient(this);
         accounts.add(account);
     }
 
+    // método asignador de loans
     public void addClientLoan(ClientLoan clientLoan) {
         clientLoan.setClient(this);
         clientLoans.add(clientLoan);
+    }
+
+    // Método asignador de Cards
+    public void addCard(Card card){
+        card.setClient(this);
+        cards.add(card);
     }
 
     public List<Loan> getLoans() {return this.clientLoans.stream().map(clientLoan -> clientLoan.getLoan()).toList();}
