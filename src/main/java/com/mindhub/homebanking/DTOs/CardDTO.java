@@ -25,6 +25,7 @@ public class CardDTO {
     private LocalDate fromDate;
 
     public CardDTO(Card card) {
+        this.id = card.getId();
         this.cardHolder = card.getCardHolder();
         this.cardType = card.getCardType();
         this.cardColor = card.getCardColor();

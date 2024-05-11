@@ -73,10 +73,6 @@ public class HomebankingApplication {
 			Card silverCard = new Card(melba, CardType.CREDIT, CardColor.SILVER, "4123-2589-9632-1478", 213, LocalDate.now().plusYears(5), LocalDate.now().minusDays(2));
 			Card titaniumCard = new Card(matrona, CardType.CREDIT, CardColor.TITANIUM, "1120-0258-0058-1003", 521, LocalDate.now().plusYears(5), LocalDate.now().minusDays(4));
 
-			melba.addCard(goldCard);
-			melba.addCard(silverCard);
-			matrona.addCard(titaniumCard);
-
 			// Assigner Method:
 			melba.addAccount(account1);
 			melba.addAccount(account2);
@@ -105,6 +101,10 @@ public class HomebankingApplication {
 			melba.addClientLoan(clientLoan2);
 			melba.addClientLoan(clientLoan3);
 			melba.addClientLoan(clientLoan4);
+
+			melba.addCard(goldCard);
+			melba.addCard(silverCard);
+			matrona.addCard(titaniumCard);
 
 			// Send objects to DB:
 			clientRepository.save(melba);
