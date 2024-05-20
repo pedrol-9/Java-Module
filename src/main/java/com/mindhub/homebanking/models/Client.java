@@ -20,6 +20,8 @@ public class Client {
 
     private String email;
 
+    private String password;
+
     @OneToMany(mappedBy="client", fetch= FetchType.EAGER)
     private Set<Account> accounts = new HashSet<>();
 
@@ -34,6 +36,13 @@ public class Client {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+    }
+
+    public Client(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
     }
 
     public Client() {
@@ -94,6 +103,14 @@ public class Client {
 
     public void setCards(List<Card> cards) {
         this.cards = cards;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     // método asignador de cuentas

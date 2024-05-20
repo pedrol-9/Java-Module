@@ -7,14 +7,18 @@ import java.util.List;
 
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class HomebankingApplication {
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
@@ -26,9 +30,9 @@ public class HomebankingApplication {
 
 			System.out.println("Hola");
 
-			// Client intances
-			Client melba = new Client("Melba", "Morel", "melba@mindhub.com");
-			Client matrona = new Client("Matrona", "Mandona", "matron@mandona.com");
+			// Client instances
+			Client melba = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("123"));
+			Client matrona = new Client("Matrona", "Mandona", "matron@mandona.com", passwordEncoder.encode("123"));
 
 			// Account instances
 			LocalDate today = LocalDate.now();
@@ -64,14 +68,15 @@ public class HomebankingApplication {
 
 			// ClientLoan instances
 			ClientLoan clientLoan1 = new ClientLoan(400000.00, 60);
-			ClientLoan clientLoan2 = new ClientLoan(50000.00,12);
+			ClientLoan clientLoan2 = new ClientLoan(50000.00, 12);
 			ClientLoan clientLoan3 = new ClientLoan(100000.00, 24);
 			ClientLoan clientLoan4 = new ClientLoan(200000.00, 36);
 
 			// Card Instances
 			Card goldCard = new Card(melba, CardType.DEBIT, CardColor.GOLD, "8452-5896-6658-8558", 103, LocalDate.now().plusYears(5), LocalDate.now());
 			Card silverCard = new Card(melba, CardType.CREDIT, CardColor.SILVER, "4123-2589-9632-1478", 213, LocalDate.now().plusYears(5), LocalDate.now().minusDays(2));
-			Card titaniumCard = new Card(matrona, CardType.CREDIT, CardColor.TITANIUM, "1120-0258-0058-1003", 521, LocalDate.now().plusYears(5), LocalDate.now().minusDays(4));
+			Card platinumCard = new Card(matrona, CardType.CREDIT, CardColor.PLATINUM, "1120-0258-0058-1003", 521, LocalDate.now().plusYears(5), LocalDate.now().minusDays(4));
+
 
 			// Assigner Method:
 			melba.addAccount(account1);
@@ -104,7 +109,7 @@ public class HomebankingApplication {
 
 			melba.addCard(goldCard);
 			melba.addCard(silverCard);
-			matrona.addCard(titaniumCard);
+			matrona.addCard(platinumCard);
 
 			// Send objects to DB:
 			clientRepository.save(melba);
@@ -139,7 +144,11 @@ public class HomebankingApplication {
 
 			cardRepository.save(goldCard);
 			cardRepository.save(silverCard);
-			cardRepository.save(titaniumCard);
+			cardRepository.save(platinumCard);
+
+			cardRepository.save(goldCard);
+			cardRepository.save(silverCard);
+			cardRepository.save(platinumCard);
 
 			// printing objects in the console
 			System.out.println(melba);
