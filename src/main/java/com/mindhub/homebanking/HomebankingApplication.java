@@ -28,11 +28,13 @@ public class HomebankingApplication {
 	public CommandLineRunner initData (ClientRepository clientRepository, AccountRepository accountRepository, TransactionRespository transactionRespository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		return (args) -> {
 
-			System.out.println("Hola");
+			System.out.println("Hola Mundo");
 
 			// Client instances
 			Client melba = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("123"));
 			Client matrona = new Client("Matrona", "Mandona", "matron@mandona.com", passwordEncoder.encode("123"));
+			// Client melba = new Client("Melba", "Morel", "melba@mindhub.com");
+			// Client matrona = new Client("Matrona", "Mandona", "matron@mandona.com");
 
 			// Account instances
 			LocalDate today = LocalDate.now();
