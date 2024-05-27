@@ -48,9 +48,12 @@ public class CardController {
   public ResponseEntity<?> createCardForAuthenticatedClient(Authentication authentication,
                                                             @RequestBody CreateCardDTO createCardDTO) {
     try {
+      // Obtener el cliente actualmente autenticado
       Client client = clientRepository.findByEmail(authentication.getName());
-      CardType cardType = CardType.valueOf(createCardDTO.getCardType().toUpperCase());
-      CardColor cardColor = CardColor.valueOf(createCardDTO.getCardColor().toUpperCase());
+
+      // Convertir los valores de cardType y cardColor a los tipos de enumeración correspondientes
+      CardType cardType = CardType.valueOf(createCardDTO.cardType().toUpperCase());
+      CardColor cardColor = CardColor.valueOf(createCardDTO.cardColor().toUpperCase());
 
       if (client.getCards().size() >= 3) {
         return new ResponseEntity<>("Client already has 3 cards", HttpStatus.FORBIDDEN);
@@ -60,7 +63,7 @@ public class CardController {
               .anyMatch(card -> card.getCardType() == cardType && card.getCardColor() == cardColor);
 
       if (cardExists) {
-        return new ResponseEntity<>("Client already has this card, consider to request a different one", HttpStatus.CONFLICT);
+        return new ResponseEntity<>("Client already has this card, consider requesting a different one", HttpStatus.CONFLICT);
       }
 
       String cardNumber = Utils.generateCardNumber();
@@ -74,13 +77,13 @@ public class CardController {
       return new ResponseEntity<>("Card created for authenticated client", HttpStatus.CREATED);
 
     } catch (IllegalArgumentException e) {
-
+      // Capturar excepciones si los valores de cardType o cardColor no son válidos
       return new ResponseEntity<>("Invalid card type or card color", HttpStatus.BAD_REQUEST);
 
     } catch (Exception e) {
-
+      // Capturar excepciones generales
       return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
-
     }
   }
+
 }
