@@ -11,7 +11,7 @@ public class AccountDTO {
     private String number;
     private LocalDate creationDate;
     private double balance;
-    Set<TransactionDTO> transactions;
+    private Set<TransactionDTO> transactions;
 
     // Builder
     public AccountDTO(Account account) {

@@ -1,7 +1,6 @@
 package com.mindhub.homebanking.models;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +18,9 @@ public class Loan {
     @ElementCollection
     @Column(name="Payments")
     private List<Integer> payments = new ArrayList<>();
+
+    @OneToMany(mappedBy="loan")
+    private List<ClientLoan> clientLoans = new ArrayList<>();
 
     //builders
     public Loan(String loanName, double maxAmount, List<Integer> payments) {
@@ -63,16 +65,29 @@ public class Loan {
         this.payments = payments;
     }
 
-    // toString Method
+    public List<ClientLoan> getClientLoans() {
+        return clientLoans;
+    }
+
+    public void setClientLoans(List<ClientLoan> clientLoans) {
+        this.clientLoans = clientLoans;
+    }
+
+    public void addClientLoan(ClientLoan clientLoan) {
+        clientLoan.setLoan(this);
+        clientLoans.add(clientLoan);
+    }
+
+    public List<Client> getClients() {
+        return this.clientLoans.stream().map(ClientLoan::getClient).toList();
+    }
+
     @Override
     public String toString() {
-        return "Loans{" +
+        return "Loan{" +
                 "id=" + id +
                 ", loanName='" + loanName + '\'' +
                 ", maxAmount=" + maxAmount +
-                ", payments=" + payments +
                 '}';
     }
-
-
 }

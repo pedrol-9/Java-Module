@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.models;
 
+import com.mindhub.homebanking.utils.Utils;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -27,6 +28,12 @@ public class Account {
 
     // builders
     public Account() {
+    }
+
+    public Account(LocalDate creationDate, double balance) {
+        this.number = Utils.generateAccountNumber();
+        this.creationDate = creationDate;
+        this.balance = balance;
     }
 
     public Account(String number, LocalDate creationDate, double balance) {
@@ -70,8 +77,8 @@ public class Account {
 
     // método asignador de trx
     public void addTrx(Transaction transaction) {
-        transactions.add(transaction);
-        transaction.setAccount(this);
+        transactions.add(transaction); //
+        transaction.setAccount(this); //
     }
 
     // toString
