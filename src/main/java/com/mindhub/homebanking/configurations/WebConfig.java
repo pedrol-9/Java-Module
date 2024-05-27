@@ -20,42 +20,42 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 public class WebConfig {
 
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+  @Autowired
+  private JwtRequestFilter jwtRequestFilter;
 
-    @Autowired
-    private CorsConfigurationSource corsConfigurationSource;
+  @Autowired
+  private CorsConfigurationSource corsConfigurationSource;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception {
-        // SecurityFilterChain define un filtro de seguridad que puede procesar una solicitud HTTP en el contexto de la seguridad de la aplicación.
+  @Bean
+  public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception {
+    // SecurityFilterChain define un filtro de seguridad que puede procesar una solicitud HTTP en el contexto de la seguridad de la aplicación.
 
-        httpSecurity
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
+    httpSecurity
+            .cors(cors -> cors.configurationSource(corsConfigurationSource))
+            .csrf(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
 
-                .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+            .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
 
-                .authorizeHttpRequests(authorize ->
-                        authorize
-                                .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/me", "/h2-console/**").permitAll()
-                                // .requestMatchers() para definir quiénes pueden acceder a las rutas establecidas en el parentesis min 37:21
-                                .anyRequest().permitAll()
-                )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
-        return httpSecurity.build();
-    }
+            .authorizeHttpRequests(authorize ->
+                    authorize
+                            .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/me", "/h2-console/**").permitAll()
+                            // .requestMatchers() para definir quiénes pueden acceder a las rutas establecidas en el parentesis min 37:21
+                            .anyRequest().permitAll()
+            )
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            );
+    return httpSecurity.build();
+  }
 
-    // definición de beans de PasswordEncoder y AuthenticationManager en la configuración de Spring Security.
-    @Bean
-    public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+  // definición de beans de PasswordEncoder y AuthenticationManager en la configuración de Spring Security.
+  @Bean
+  public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
+  }
 }

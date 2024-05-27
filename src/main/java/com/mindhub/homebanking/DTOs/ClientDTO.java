@@ -40,6 +40,9 @@ public class ClientDTO {
         this.cards = client.getCards().stream().map(card -> new CardDTO(card)).toList();
     }
 
+    public ClientDTO(long id, String firstName, String lastName, String jwt) {
+    }
+
     // getters
     public long getId() {
         return id;

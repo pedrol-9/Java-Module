@@ -70,7 +70,7 @@ public class AuthController {
             return  new ResponseEntity<>("The email field can't be empty", HttpStatus.FORBIDDEN);
         }
 
-        Client client = new Client (
+        Client client = new Client(
                 registerDTO.firstName(),
                 registerDTO.lastName(),
                 registerDTO.email(),
@@ -79,8 +79,10 @@ public class AuthController {
 
         String accountNumber = Utils.generateAccountNumber();
         Account account = new Account(accountNumber, LocalDate.now(), 0.0);
-        account.setClient(client);
+        // account.setClient(client);
+        client.addAccount(account);
         accountRepository.save(account);
+
         return new ResponseEntity<>("Client created", HttpStatus.CREATED);
     }
 
@@ -89,5 +91,4 @@ public class AuthController {
         Client client = clientRepository.findByEmail(authentication.getName());
         return ResponseEntity.ok(new ClientDTO(client));
     }
-
 }
