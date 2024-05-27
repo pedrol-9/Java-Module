@@ -40,10 +40,10 @@ public class HomebankingApplication {
 			LocalDate today = LocalDate.now();
 			LocalDate tomorrow = today.plusDays(1);
 
-			Account account1 = new Account("VIN001", today, 5000.00);
-			Account account2 = new Account("VIN002", tomorrow, 7500.00);
-			Account account3 = new Account("VIN003", today, 2500.00);
-			Account account4 = new Account("VIN004", today, 2900.00);
+			Account account1 = new Account(today, 5000.00);
+			Account account2 = new Account(tomorrow, 7500.00);
+			Account account3 = new Account(today, 2500.00);
+			Account account4 = new Account(today, 2900.00);
 
 			// Transaction instances
 			Transaction trx1 = new Transaction(TransactionType.DEBIT, 120.52, "coffee_Walla", LocalDateTime.now());

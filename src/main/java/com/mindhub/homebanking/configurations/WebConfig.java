@@ -27,8 +27,8 @@ public class WebConfig {
     private CorsConfigurationSource corsConfigurationSource;
 
     @Bean
-    @Primary
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception {
+        // SecurityFilterChain define un filtro de seguridad que puede procesar una solicitud HTTP en el contexto de la seguridad de la aplicación.
 
         httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
@@ -40,7 +40,7 @@ public class WebConfig {
 
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/api/auth/login", "/api/auth/register", "/h2-console/**").permitAll()
+                                .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/me", "/h2-console/**").permitAll()
                                 // .requestMatchers() para definir quiénes pueden acceder a las rutas establecidas en el parentesis min 37:21
                                 .anyRequest().permitAll()
                 )
@@ -50,6 +50,7 @@ public class WebConfig {
         return httpSecurity.build();
     }
 
+    // definición de beans de PasswordEncoder y AuthenticationManager en la configuración de Spring Security.
     @Bean
     public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
 

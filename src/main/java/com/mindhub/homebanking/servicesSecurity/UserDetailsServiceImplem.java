@@ -17,6 +17,7 @@ public class UserDetailsServiceImplem implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         Client client = clientRepository.findByEmail(username);
 
         if (client == null){

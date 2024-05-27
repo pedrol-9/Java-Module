@@ -27,9 +27,10 @@ public class JwtUtilService {
         return claimsTFunction.apply(claims);
     }
 
-    public String extractUserName(String token) { return extractClaim(token, Claims::getSubject);}
+    // estos métodos se utilizan en JwtRequestFiler para extraer la info a la que apunta y poder autenticar
+    public String extractUserName(String token) { return extractClaim(token, Claims::getSubject); }
 
-    public Date extractExpiration(String token){ return extractClaim(token, Claims::getExpiration); }
+    public Date extractExpiration(String token) { return extractClaim(token, Claims::getExpiration); }
 
     public Boolean isTokenExpired(String token) { return extractExpiration(token).before(new Date()); }
 
@@ -50,5 +51,4 @@ public class JwtUtilService {
         claims.put("rol", rol);
         return createToken(claims, userDetails.getUsername());
     }
-
 }
