@@ -47,7 +47,6 @@ public class CardController {
   @PostMapping("/current/create-card")
   public ResponseEntity<?> createCardForAuthenticatedClient(Authentication authentication,
                                                             @RequestBody CreateCardDTO createCardDTO) {
-    try {
       // Obtener el cliente actualmente autenticado
       Client client = clientRepository.findByEmail(authentication.getName());
 
@@ -72,18 +71,17 @@ public class CardController {
       LocalDate thruDate = fromDate.plusYears(5);
 
       Card newCard = new Card(client, cardType, cardColor, cardNumber, ccv, thruDate, fromDate);
+      client.addCard(newCard);
+      clientRepository.save(client);
       cardRepository.save(newCard);
 
       return new ResponseEntity<>("Card created for authenticated client", HttpStatus.CREATED);
 
-    } catch (IllegalArgumentException e) {
       // Capturar excepciones si los valores de cardType o cardColor no son válidos
-      return new ResponseEntity<>("Invalid card type or card color", HttpStatus.BAD_REQUEST);
+      // return new ResponseEntity<>("Invalid card type or card color", HttpStatus.BAD_REQUEST);
 
-    } catch (Exception e) {
+
       // Capturar excepciones generales
-      return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+      // return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
   }
-
 }
