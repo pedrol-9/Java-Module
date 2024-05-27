@@ -13,9 +13,20 @@ public class Utils {
     }
 
     public static String generateCardNumber() {
-        long number = cardNumberCounter.getAndIncrement();
-        String numberStr = String.format("%016d", number);
-        return numberStr.replaceAll("(.{4})", "$1-").substring(0, 19);
+//        long number = cardNumberCounter.getAndIncrement();
+//        String numberStr = String.format("%016d", number);
+//        return numberStr.replaceAll("(.{4})", "$1-").substring(0, 19);
+
+        StringBuilder cardNumber = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            Random random = new Random();
+            int block = random.nextInt(10000);
+            cardNumber.append(String.format("%04d", block));
+            if (i < 3) {
+                cardNumber.append(" - ");
+            }
+        }
+        return cardNumber.toString();
     }
 
     public static int generateCcv() {

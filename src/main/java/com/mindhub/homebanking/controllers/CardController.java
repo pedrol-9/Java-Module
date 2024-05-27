@@ -65,7 +65,12 @@ public class CardController {
         return new ResponseEntity<>("Client already has this card, consider requesting a different one", HttpStatus.CONFLICT);
       }
 
-      String cardNumber = Utils.generateCardNumber();
+      // Intentar generar un número de tarjeta único
+      String cardNumber;
+      do {
+        cardNumber = Utils.generateCardNumber();
+      } while (cardRepository.existsByNumber(cardNumber));
+
       int ccv = Utils.generateCcv();
       LocalDate fromDate = LocalDate.now();
       LocalDate thruDate = fromDate.plusYears(5);
@@ -76,12 +81,5 @@ public class CardController {
       cardRepository.save(newCard);
 
       return new ResponseEntity<>("Card created for authenticated client", HttpStatus.CREATED);
-
-      // Capturar excepciones si los valores de cardType o cardColor no son válidos
-      // return new ResponseEntity<>("Invalid card type or card color", HttpStatus.BAD_REQUEST);
-
-
-      // Capturar excepciones generales
-      // return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

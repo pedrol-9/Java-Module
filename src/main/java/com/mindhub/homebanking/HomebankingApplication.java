@@ -32,7 +32,7 @@ public class HomebankingApplication {
 
 			// Client instances
 			Client melba = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("123"));
-			Client matrona = new Client("Matrona", "Mandona", "matron@mandona.com", passwordEncoder.encode("123"));
+			Client matrona = new Client("Matrona", "Mandona", "matrona@mandona.com", passwordEncoder.encode("123"));
 			// Client melba = new Client("Melba", "Morel", "melba@mindhub.com");
 			// Client matrona = new Client("Matrona", "Mandona", "matron@mandona.com");
 

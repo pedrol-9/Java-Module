@@ -41,8 +41,9 @@ public class WebConfig {
             .authorizeHttpRequests(authorize ->
                     authorize
                             .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/me", "/h2-console/**").permitAll()
-                            // .requestMatchers() para definir quiénes pueden acceder a las rutas establecidas en el parentesis min 37:21
-                            .anyRequest().permitAll()
+                            .requestMatchers("/api/clients/current/accounts/**", "/api/clients/current").authenticated()
+                            .requestMatchers("/api/clients/current/cards/**", "/api/clients/current/").authenticated()
+                            .anyRequest().authenticated()
             )
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
