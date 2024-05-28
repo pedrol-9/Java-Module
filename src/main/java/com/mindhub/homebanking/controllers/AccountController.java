@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 @RestController
 @RequestMapping("/api/clients")
 public class AccountController {
@@ -31,10 +29,12 @@ public class AccountController {
     public ResponseEntity<?> getAccounts(Authentication authentication) {
         Client client = clientRepository.findByEmail(authentication.getName());
         List<Account> accountsList = accountRepository.findByClient(client);
-        //List<AccountDto> accountsDtoList = accountsList.stream().map(AccountDto::new).collect(Collectors.toList());
+        List<AccountDTO> accountsDtoList = accountsList.stream()
+                .map(AccountDTO::new)
+                .toList();
 
         if (!accountsList.isEmpty()) {
-            return new ResponseEntity<>(accountsList, HttpStatus.OK);
+            return new ResponseEntity<>(accountsDtoList, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Client has no accounts", HttpStatus.NOT_FOUND);
         }
