@@ -13,10 +13,6 @@ public class Utils {
     }
 
     public static String generateCardNumber() {
-//        long number = cardNumberCounter.getAndIncrement();
-//        String numberStr = String.format("%016d", number);
-//        return numberStr.replaceAll("(.{4})", "$1-").substring(0, 19);
-
         StringBuilder cardNumber = new StringBuilder();
         for (int i = 0; i < 4; i++) {
             Random random = new Random();
@@ -33,4 +29,5 @@ public class Utils {
         Random random = new Random();
         return 100 + random.nextInt(900);
     }
+
 }
