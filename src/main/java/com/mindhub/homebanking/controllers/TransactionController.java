@@ -46,7 +46,7 @@ public class TransactionController {
 
   // Endpoint para realizar una transferencia
   @PostMapping("/current/make-transaction")
-  public ResponseEntity<String> makeTransaction(@RequestBody NewTransactionDTO newTransactionDTO) {
-    return transactionService.makeTransaction(newTransactionDTO);
+  public ResponseEntity<String> makeTransaction(Authentication authentication, @RequestBody NewTransactionDTO newTransactionDTO) {
+    return transactionService.makeTransaction(authentication, newTransactionDTO);
   }
 }

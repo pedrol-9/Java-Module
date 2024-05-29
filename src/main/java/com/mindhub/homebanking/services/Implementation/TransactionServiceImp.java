@@ -53,9 +53,9 @@ public class TransactionServiceImp implements TransactionService {
 
 
   @Override
-  public ResponseEntity<String> makeTransaction(@RequestBody NewTransactionDTO newTransactionDTO) {
+  public ResponseEntity<String> makeTransaction(Authentication authentication, @RequestBody NewTransactionDTO newTransactionDTO) {
     // Obtiene el cliente autenticado
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    // authentication = SecurityContextHolder.getContext().getAuthentication();
     String username = authentication.getName();
     Client client = clientRepository.findByEmail(username);
 

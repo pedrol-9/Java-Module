@@ -12,5 +12,5 @@ public interface TransactionService {
 
   ResponseEntity<List<TransactionDTO>> getClientTransactions(Authentication authentication);
 
-  ResponseEntity<String> makeTransaction(@RequestBody NewTransactionDTO newTransactionDTO);
+  ResponseEntity<String> makeTransaction(Authentication authentication, @RequestBody NewTransactionDTO newTransactionDTO);
 }
