@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.beans.BeanProperty;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,11 +61,6 @@ public class TransactionServiceImp implements TransactionService {
     String username = authentication.getName();
     Client client = clientRepository.findByEmail(username);
 
-    // Valida que el cliente esté autenticado
-    if (client == null) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Client not authenticated");
-    }
-
     // Valida que los datos de la solicitud no estén vacíos
     if (newTransactionDTO.amount() == 0 || newTransactionDTO.description().isBlank() ||
             newTransactionDTO.sourceAccountNumber().isEmpty() || newTransactionDTO.destinationAccountNumber().isEmpty()) {
@@ -75,12 +71,6 @@ public class TransactionServiceImp implements TransactionService {
     if (newTransactionDTO.sourceAccountNumber().equals(newTransactionDTO.destinationAccountNumber())) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Source account cannot be the same as destination account");
     }
-
-    /* // Valida que el tipo de transacción sea un enum válido
-    TransactionType type = newTransactionDTO.type();
-    if (type != TransactionType.CREDIT && type != TransactionType.DEBIT) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid transaction type");
-    } */
 
     // Obtiene las cuentas de origen y destino
     Account sourceAccount = accountRepository.findByNumber(newTransactionDTO.sourceAccountNumber());
@@ -119,4 +109,7 @@ public class TransactionServiceImp implements TransactionService {
 
     return ResponseEntity.status(HttpStatus.CREATED).body("Transaction successful");
   }
+
 }
+
+
