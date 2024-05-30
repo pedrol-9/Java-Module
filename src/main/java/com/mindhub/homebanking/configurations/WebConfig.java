@@ -43,6 +43,7 @@ public class WebConfig {
                             .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/me", "/h2-console/**").permitAll()
                             .requestMatchers("/api/clients/current/accounts/**", "/api/clients/current").authenticated()
                             .requestMatchers("/api/clients/current/cards/**", "/api/clients/current/").authenticated()
+                            .requestMatchers("/api/clients/current/transactions/**", "/api/clients/current/").authenticated()
                             .anyRequest().authenticated()
             )
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
