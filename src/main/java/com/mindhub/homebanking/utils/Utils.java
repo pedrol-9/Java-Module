@@ -19,7 +19,7 @@ public class Utils {
             int block = random.nextInt(10000);
             cardNumber.append(String.format("%04d", block));
             if (i < 3) {
-                cardNumber.append(" - ");
+                cardNumber.append("-");
             }
         }
         return cardNumber.toString();

@@ -33,8 +33,8 @@ public class LoanController {
   private LoanService loanService;
 
   @GetMapping("/")
-  public ResponseEntity<?> getLoans(Authentication authentication) {
-    return loanService.getLoansAvailable(authentication);
+  public ResponseEntity<?> getLoans() {
+    return loanService.getLoansAvailable();
   }
 
   @PostMapping("/loan-application")

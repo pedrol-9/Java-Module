@@ -14,11 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.beans.BeanProperty;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -93,7 +91,7 @@ public class TransactionServiceImp implements TransactionService {
 
     // Realiza la transacción
     Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -newTransactionDTO.amount(), newTransactionDTO.description(), LocalDateTime.now());
-    sourceAccount.addTrx(debitTransaction);
+    sourceAccount.addTransaction(debitTransaction);
     transactionRespository.save(debitTransaction);
     // Actualiza el saldo de la cuenta de origen (en caso de ser una transacción de débito)
     sourceAccount.setBalance(sourceAccount.getBalance() - newTransactionDTO.amount());
@@ -101,7 +99,7 @@ public class TransactionServiceImp implements TransactionService {
 
     // Realiza la transacción inversa (en caso de ser una transacción de débito)
     Transaction creditTransaction = new Transaction(TransactionType.CREDIT, newTransactionDTO.amount(), newTransactionDTO.description(), LocalDateTime.now());
-    destinationAccount.addTrx(creditTransaction);
+    destinationAccount.addTransaction(creditTransaction);
     transactionRespository.save(creditTransaction);
     // Actualiza el saldo de la cuenta de origen (en caso de ser una transacción de débito)
     destinationAccount.setBalance(destinationAccount.getBalance() + newTransactionDTO.amount());

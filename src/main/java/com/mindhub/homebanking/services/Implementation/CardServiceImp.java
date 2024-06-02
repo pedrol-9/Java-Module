@@ -57,14 +57,14 @@ public class CardServiceImp implements CardService {
       return new ResponseEntity<>("Client already has 3 cards", HttpStatus.FORBIDDEN);
     }
 
+    // Verificar si el cliente ya tiene una tarjeta del mismo tipo y color
     boolean cardExists = client.getCards().stream()
             .anyMatch(card -> card.getCardType() == cardType && card.getCardColor() == cardColor);
-
     if (cardExists) {
       return new ResponseEntity<>("Client already has this card, consider requesting a different one", HttpStatus.CONFLICT);
     }
 
-    // Intentar generar un número de tarjeta único
+    // Generar un número de tarjeta único
     String cardNumber;
     do {
       cardNumber = Utils.generateCardNumber();
@@ -81,6 +81,4 @@ public class CardServiceImp implements CardService {
 
     return new ResponseEntity<>("Card created for authenticated client", HttpStatus.CREATED);
   }
-
-
 }

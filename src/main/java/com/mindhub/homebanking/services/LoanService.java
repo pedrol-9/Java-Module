@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 
 public interface LoanService {
 
-  ResponseEntity<?> getLoansAvailable(Authentication authentication);
+  ResponseEntity<?> getLoansAvailable();
 
   ResponseEntity<?> createLoanForAuthenticatedClient(Authentication authentication, LoanApplicationDTO loanApplicationDTO);
 

@@ -34,10 +34,7 @@ public class LoanServiceImp implements LoanService {
   private TransactionRespository transactionRespository;
 
   @Override
-  public ResponseEntity<?> getLoansAvailable(Authentication authentication) {
-    String username = authentication.getName();
-    Client client = clientRepository.findByEmail(username);
-
+  public ResponseEntity<?> getLoansAvailable() {
     List<LoanDTO> loans = loanRepository.findAll().stream().map(LoanDTO::new).toList();
     return new ResponseEntity<>(loans, HttpStatus.OK);
   }
@@ -53,7 +50,7 @@ public class LoanServiceImp implements LoanService {
       return new ResponseEntity<>("Please, check amount entry", HttpStatus.FORBIDDEN);
     }
 
-    // Valida que el monto de prestamo sea
+    // Valida que el numero de cuotas sea positivo
     if (loanApplicationDTO.payments() <= 0) {
       return new ResponseEntity<>("Please, check the entries and try again", HttpStatus.FORBIDDEN);
     }
@@ -87,15 +84,7 @@ public class LoanServiceImp implements LoanService {
     }
 
     // Calcular la tasa de interés de acuerdo a las cuotas
-    double interestRate;
-
-    if (loanApplicationDTO.payments() < 12) {
-      interestRate = 0.15;
-    } else if (loanApplicationDTO.payments() == 12) {
-      interestRate = 0.20;
-    } else {
-      interestRate = 0.25;
-    }
+    double interestRate = calculateInterestRate(loanApplicationDTO.payments());
 
     // Crear y configurar el nuevo préstamo con el monto y la tasa de interés
     double amountPlusInterest = loanApplicationDTO.amount() + (loanApplicationDTO.amount() * interestRate);
@@ -110,10 +99,23 @@ public class LoanServiceImp implements LoanService {
     String description = "New loan approved and credited";
     LocalDateTime date = LocalDateTime.now();
     Transaction transaction = new Transaction(TransactionType.CREDIT, loanApplicationDTO.amount(), description, date);
-    transaction.setAccount(destinationAccount);
+    destinationAccount.addTransaction(transaction);
     transactionRespository.save(transaction);
+    destinationAccount.setBalance(destinationAccount.getBalance() + loanApplicationDTO.amount());
+    accountRepository.save(destinationAccount);
 
     // return new ResponseEntity<>("Loan created and credited to destination account", HttpStatus.CREATED);
     return new ResponseEntity<>("Loan created and credited to destination account", HttpStatus.CREATED);
   }
+
+  private double calculateInterestRate(int payments) {
+    if (payments == 12) {
+      return 0.20;
+    } else if (payments > 12) {
+      return 0.25;
+    } else {
+      return 0.15;
+    }
+  }
 }
+

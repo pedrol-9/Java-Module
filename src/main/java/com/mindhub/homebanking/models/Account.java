@@ -76,7 +76,7 @@ public class Account {
     }
 
     // método asignador de trx
-    public void addTrx(Transaction transaction) {
+    public void addTransaction(Transaction transaction) {
         transactions.add(transaction); //
         transaction.setAccount(this); //
     }

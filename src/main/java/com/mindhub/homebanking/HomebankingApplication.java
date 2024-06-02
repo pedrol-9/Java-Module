@@ -85,18 +85,18 @@ public class HomebankingApplication {
 			matrona.addAccount(account3);
 			matrona.addAccount(account4);
 
-			account1.addTrx(trx1);
-			account1.addTrx(trx2);
-			account1.addTrx(trx3);
-			account2.addTrx(trx4);
-			account2.addTrx(trx5);
-			account2.addTrx(trx6);
-			account3.addTrx(trx7);
-			account3.addTrx(trx8);
-			account3.addTrx(trx9);
-			account4.addTrx(trx10);
-			account4.addTrx(trx11);
-			account4.addTrx(trx12);
+			account1.addTransaction(trx1);
+			account1.addTransaction(trx2);
+			account1.addTransaction(trx3);
+			account2.addTransaction(trx4);
+			account2.addTransaction(trx5);
+			account2.addTransaction(trx6);
+			account3.addTransaction(trx7);
+			account3.addTransaction(trx8);
+			account3.addTransaction(trx9);
+			account4.addTransaction(trx10);
+			account4.addTransaction(trx11);
+			account4.addTransaction(trx12);
 
 			mortgageLoan.addClientLoan(clientLoan1);
 			personalLoan.addClientLoan(clientLoan2);

@@ -6,6 +6,8 @@ import java.util.List;
 
 public class LoanDTO {
 
+  private long id;
+
   private String loanName;
 
   private double maxAmount;
@@ -13,9 +15,14 @@ public class LoanDTO {
   private List<Integer> payments;
 
   public LoanDTO(Loan loan) {
+    this.id = loan.getId();
     this.loanName = loan.getLoanName();
     this.maxAmount = loan.getMaxAmount();
     this.payments = loan.getPayments();
+  }
+
+  public long getId() {
+    return id;
   }
 
   public String getLoanName() {

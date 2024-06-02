@@ -28,16 +28,15 @@ public class AccountServiceImp implements AccountService {
   @Override
   public ResponseEntity<?> getAccounts(Authentication authentication) {
     Client client = clientRepository.findByEmail(authentication.getName());
-    List<Account> accountsList = accountRepository.findByClient(client);
-    List<AccountDTO> accountsDtoList = accountsList.stream()
+    List<AccountDTO> accountsDtoList = accountRepository.findByClient(client).stream()
             .map(AccountDTO::new)
             .toList();
 
-    if (!accountsList.isEmpty()) {
+    if (!accountsDtoList.isEmpty()) {
       return new ResponseEntity<>(accountsDtoList, HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>("Client has no accounts", HttpStatus.NOT_FOUND);
     }
+
+    return new ResponseEntity<>("Client has no accounts", HttpStatus.NOT_FOUND);
   }
 
   public ResponseEntity<?> createAccountForAuthenticatedClient(Authentication authentication) {
@@ -57,5 +56,4 @@ public class AccountServiceImp implements AccountService {
 
     return new ResponseEntity<>("Account created for authenticated client", HttpStatus.CREATED);
   }
-
 }
