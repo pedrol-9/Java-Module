@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/clients")
-@Transactional
+
 public class TransactionController {
 
   @Autowired
@@ -38,6 +38,7 @@ public class TransactionController {
 
   // Endpoint para realizar una transferencia
   @PostMapping("/current/make-transaction")
+  @Transactional
   public ResponseEntity<String> makeTransaction(Authentication authentication, @RequestBody NewTransactionDTO newTransactionDTO) {
     return transactionService.makeTransaction(authentication, newTransactionDTO);
   }

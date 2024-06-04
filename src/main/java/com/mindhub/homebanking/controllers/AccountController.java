@@ -30,7 +30,7 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping("/current/accounts")
-    public ResponseEntity<?> getAccounts(Authentication authentication) {
+    public ResponseEntity<?> getAccountsForAuthenticatedClient(Authentication authentication) {
         return accountService.getAccounts(authentication);
     }
 

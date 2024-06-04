@@ -22,6 +22,8 @@ public class Client {
 
     private String password;
 
+    private boolean admin = false;
+
     @OneToMany(mappedBy="client", fetch= FetchType.EAGER)
     private Set<Account> accounts = new HashSet<>();
 
@@ -43,6 +45,7 @@ public class Client {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.setAdmin(email);
     }
 
     public Client() {
@@ -111,6 +114,18 @@ public class Client {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(String email) {
+        if (email!= null && email.contains("@mindhub.com")) {
+            this.admin = true;
+        } else {
+            this.admin = false;
+        }
     }
 
     // método asignador de cuentas

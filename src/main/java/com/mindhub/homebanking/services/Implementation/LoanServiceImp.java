@@ -31,7 +31,7 @@ public class LoanServiceImp implements LoanService {
   private AccountRepository accountRepository;
 
   @Autowired
-  private TransactionRespository transactionRespository;
+  private TransactionRespository transactionRepository;
 
   @Override
   public ResponseEntity<?> getLoansAvailable() {
@@ -100,7 +100,7 @@ public class LoanServiceImp implements LoanService {
     LocalDateTime date = LocalDateTime.now();
     Transaction transaction = new Transaction(TransactionType.CREDIT, loanApplicationDTO.amount(), description, date);
     destinationAccount.addTransaction(transaction);
-    transactionRespository.save(transaction);
+    transactionRepository.save(transaction);
     destinationAccount.setBalance(destinationAccount.getBalance() + loanApplicationDTO.amount());
     accountRepository.save(destinationAccount);
 

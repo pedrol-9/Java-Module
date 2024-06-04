@@ -41,11 +41,9 @@ public class WebConfig {
             .authorizeHttpRequests(authorize ->
                     authorize
                             .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/me", "/h2-console/**").permitAll()
-                            .requestMatchers("/api/clients/current/accounts/**", "/api/clients/current").authenticated()
-                            .requestMatchers("/api/clients/current/cards/**", "/api/clients/current/").authenticated()
-                            .requestMatchers("/api/clients/current/transactions/**", "/api/clients/current/").authenticated()
-                            .requestMatchers("/api/loans/**" ).permitAll()
-                            .anyRequest().permitAll()
+                            .requestMatchers("/api/clients/current/accounts", "/api/clients/current/create-account", "/api/clients/current/card", "api/clients/current/create-card", "/api/clients/current/transactions", "/api/loans", "api/clients/current/make-transaction").hasRole("CLIENT")
+                            .requestMatchers("/api/clients/**", "/api/clients/current").hasRole("ADMIN")
+                            .anyRequest().authenticated()
             )
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

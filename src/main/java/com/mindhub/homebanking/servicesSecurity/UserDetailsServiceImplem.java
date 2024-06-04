@@ -19,15 +19,22 @@ public class UserDetailsServiceImplem implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Client client = clientRepository.findByEmail(username);
+        String rol = "";
 
         if (client == null){
             throw new UsernameNotFoundException(username);
         }
 
+        if (client.isAdmin()) {
+            rol = "ADMIN";
+        } else {
+            rol = "CLIENT";
+        }
+
         return User
                 .withUsername(username)
                 .password(client.getPassword())
-                .roles("CLIENT")
+                .roles(rol)
                 .build();
     }
 }
