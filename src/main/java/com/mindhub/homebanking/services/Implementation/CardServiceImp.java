@@ -53,15 +53,34 @@ public class CardServiceImp implements CardService {
     CardType cardType = CardType.valueOf(createCardDTO.cardType().toUpperCase());
     CardColor cardColor = CardColor.valueOf(createCardDTO.cardColor().toUpperCase());
 
-    if (client.getCards().size() >= 3) {
+    /* if (client.getCards().size() >= 3) {
       return new ResponseEntity<>("Client already has 3 cards", HttpStatus.FORBIDDEN);
+    } */
+
+    // Contadores para llevar un registro de la cantidad de tarjetas de cada tipo
+    int debitCardsCount = 0;
+    int creditCardsCount = 0;
+
+    // Iterar sobre las tarjetas del cliente y contar cuántas tarjetas tiene de cada tipo
+    for (Card card : client.getCards()) {
+      if (card.getCardType() == CardType.DEBIT) {
+        debitCardsCount++;
+      } else if (card.getCardType() == CardType.CREDIT) {
+        creditCardsCount++;
+      }
+    }
+
+    // Verificar si el cliente ya tiene tres tarjetas del mismo tipo
+    if ((cardType == CardType.DEBIT && debitCardsCount >= 3) ||
+            (cardType == CardType.CREDIT && creditCardsCount >= 3)) {
+      return new ResponseEntity<>("Client already has 3 cards of the same type", HttpStatus.FORBIDDEN);
     }
 
     // Verificar si el cliente ya tiene una tarjeta del mismo tipo y color
     boolean cardExists = client.getCards().stream()
             .anyMatch(card -> card.getCardType() == cardType && card.getCardColor() == cardColor);
     if (cardExists) {
-      return new ResponseEntity<>("Client already has this card, consider requesting a different one", HttpStatus.CONFLICT);
+      return new ResponseEntity<>("Client already has this card, consider requesting a different one", HttpStatus.FORBIDDEN);
     }
 
     // Generar un número de tarjeta único

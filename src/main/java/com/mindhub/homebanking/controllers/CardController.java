@@ -14,12 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class CardController {
 
   @Autowired
-  private CardRepository cardRepository;
-
-  @Autowired
-  private ClientRepository clientRepository;
-
-  @Autowired
   private CardService cardService;
 
   @GetMapping("/current/cards")
@@ -27,7 +21,7 @@ public class CardController {
     return cardService.getCards(authentication);
   }
 
-  @PostMapping("/current/create-card")
+  @PostMapping("/current/cards")
   public ResponseEntity<?> createCardForAuthenticatedClient(Authentication authentication,
                                                             @RequestBody CreateCardDTO createCardDTO) {
       return cardService.createCardForAuthenticatedClient(authentication, createCardDTO);

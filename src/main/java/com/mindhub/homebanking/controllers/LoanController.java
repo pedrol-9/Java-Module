@@ -18,18 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class LoanController {
 
   @Autowired
-  private ClientRepository clientRepository;
-
-  @Autowired
-  private TransactionRespository transactionRespository;
-
-  @Autowired
-  private AccountRepository accountRepository;
-
-  @Autowired
-  private LoanRepository loanRepository;
-
-  @Autowired
   private LoanService loanService;
 
   @GetMapping("/")
@@ -37,7 +25,7 @@ public class LoanController {
     return loanService.getLoansAvailable();
   }
 
-  @PostMapping("/loan-application")
+  @PostMapping("/")
   public ResponseEntity<?> createLoan(Authentication authentication, @RequestBody LoanApplicationDTO loanApplicationDTO) {
     return loanService.createLoanForAuthenticatedClient(authentication, loanApplicationDTO);
   }

@@ -20,15 +20,6 @@ import java.util.List;
 public class TransactionController {
 
   @Autowired
-  private TransactionRespository transactionRepository;
-
-  @Autowired
-  private ClientRepository clientRepository;
-
-  @Autowired
-  private AccountRepository accountRepository;
-
-  @Autowired
   private TransactionService transactionService;
 
   @GetMapping("/current/transactions")
@@ -37,7 +28,7 @@ public class TransactionController {
   }
 
   // Endpoint para realizar una transferencia
-  @PostMapping("/current/make-transaction")
+  @PostMapping("/current/transactions")
   @Transactional
   public ResponseEntity<String> makeTransaction(Authentication authentication, @RequestBody NewTransactionDTO newTransactionDTO) {
     return transactionService.makeTransaction(authentication, newTransactionDTO);

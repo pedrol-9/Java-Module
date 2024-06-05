@@ -14,6 +14,7 @@ public class Card {
 
     private String cardHolder;
 
+    @Enumerated(EnumType.STRING)
     private CardType cardType;
 
     private CardColor cardColor;

@@ -34,7 +34,7 @@ public class AccountController {
         return accountService.getAccounts(authentication);
     }
 
-    @PostMapping("/current/create-account")
+    @PostMapping("/current/accounts")
     public ResponseEntity<?> createAccountForAuthenticatedClient(Authentication authentication) {
         return accountService.createAccountForAuthenticatedClient(authentication);
     }
