@@ -9,6 +9,8 @@ import com.mindhub.homebanking.models.TransactionType;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.TransactionRespository;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
 import com.mindhub.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,22 +30,19 @@ public class TransactionServiceImp implements TransactionService {
   private TransactionRespository transactionRespository;
 
   @Autowired
-  private ClientRepository clientRepository;
+  private AccountService accountService;
 
   @Autowired
-  private AccountRepository accountRepository;
+  private ClientService clientService;
 
   @Override
   public ResponseEntity<List<TransactionDTO>> getClientTransactions(Authentication authentication) {
-    //authentication = SecurityContextHolder.getContext().getAuthentication();
-    String username = authentication.getName();
-    Client client = clientRepository.findByEmail(username);
 
-    if (client == null) {
-      return ResponseEntity.notFound().build();
-    }
+    String username = authentication.getName();
+    Client client = clientService.getActualClient(authentication);
 
     List<Transaction> transactions = transactionRespository.findByAccountClientId(client.getId());
+
     List<TransactionDTO> transactionDTOs = transactions.stream()
             .map(TransactionDTO::new)
             .collect(Collectors.toList());
@@ -51,13 +50,12 @@ public class TransactionServiceImp implements TransactionService {
     return ResponseEntity.ok(transactionDTOs);
   }
 
-
   @Override
   public ResponseEntity<String> makeTransaction(Authentication authentication, @RequestBody NewTransactionDTO newTransactionDTO) {
     // Obtiene el cliente autenticado
     // authentication = SecurityContextHolder.getContext().getAuthentication();
     String username = authentication.getName();
-    Client client = clientRepository.findByEmail(username);
+    Client client = clientService.getActualClient(authentication);
 
     // Valida que los datos de la solicitud no estén vacíos
     if (newTransactionDTO.amount() == 0 || newTransactionDTO.description().isBlank() ||
@@ -71,8 +69,8 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     // Obtiene las cuentas de origen y destino
-    Account sourceAccount = accountRepository.findByNumber(newTransactionDTO.sourceAccountNumber());
-    Account destinationAccount = accountRepository.findByNumber(newTransactionDTO.destinationAccountNumber());
+    Account sourceAccount = accountService.getAccountByNumber(newTransactionDTO.sourceAccountNumber());
+    Account destinationAccount = accountService.getAccountByNumber(newTransactionDTO.destinationAccountNumber());
 
     // Valida que las cuentas existan
     if (sourceAccount == null || destinationAccount == null) {
@@ -95,7 +93,7 @@ public class TransactionServiceImp implements TransactionService {
     transactionRespository.save(debitTransaction);
     // Actualiza el saldo de la cuenta de origen (en caso de ser una transacción de débito)
     sourceAccount.setBalance(sourceAccount.getBalance() - newTransactionDTO.amount());
-    accountRepository.save(sourceAccount);
+    accountService.saveAccount(sourceAccount);
 
     // Realiza la transacción inversa (en caso de ser una transacción de débito)
     Transaction creditTransaction = new Transaction(TransactionType.CREDIT, newTransactionDTO.amount(), newTransactionDTO.description(), LocalDateTime.now());
@@ -103,9 +101,14 @@ public class TransactionServiceImp implements TransactionService {
     transactionRespository.save(creditTransaction);
     // Actualiza el saldo de la cuenta de origen (en caso de ser una transacción de débito)
     destinationAccount.setBalance(destinationAccount.getBalance() + newTransactionDTO.amount());
-    accountRepository.save(destinationAccount);
+    accountService.saveAccount(destinationAccount);
 
     return ResponseEntity.status(HttpStatus.CREATED).body("Transaction successful");
+  }
+
+  @Override
+  public void saveTransaction(Transaction transaction) {
+    transactionRespository.save(transaction);
   }
 
 }

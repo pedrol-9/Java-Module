@@ -28,4 +28,5 @@ public class ClientController {
     public ResponseEntity<ClientDTO> getClient(@PathVariable Long id) {
         return clientService.getClient(id);
     }
+
 }

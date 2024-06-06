@@ -9,6 +9,7 @@ import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.CardRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.services.CardService;
+import com.mindhub.homebanking.services.ClientService;
 import com.mindhub.homebanking.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class CardServiceImp implements CardService {
 
@@ -30,15 +33,15 @@ public class CardServiceImp implements CardService {
   @Autowired
   private CardRepository cardRepository;
 
-  public ResponseEntity<?> getCards(Authentication authentication) {
-    Client client = clientRepository.findByEmail(authentication.getName());
-    List<CardDTO> cardsList = cardRepository.findByClient(client)
-            .stream()
-            .map(CardDTO::new)
-            .collect(Collectors.toList());
+  @Autowired
+  private ClientService clientService;
 
-    if (!cardsList.isEmpty()) {
-      return new ResponseEntity<>(cardsList, HttpStatus.OK);
+  public ResponseEntity<?> getCards(Authentication authentication) {
+    Client client = clientService.getActualClient(authentication);
+    List<CardDTO> cardsDtoList = getCardsByAuthenticatedClient(client);
+
+    if (!cardsDtoList.isEmpty()) {
+      return new ResponseEntity<>(cardsDtoList, HttpStatus.OK);
     } else {
       return new ResponseEntity<>("Client has no cards", HttpStatus.NOT_FOUND);
     }
@@ -47,7 +50,7 @@ public class CardServiceImp implements CardService {
   public ResponseEntity<?> createCardForAuthenticatedClient(Authentication authentication,
                                                             @RequestBody CreateCardDTO createCardDTO) {
     // Obtener el cliente actualmente autenticado
-    Client client = clientRepository.findByEmail(authentication.getName());
+    Client client = getAuthenticatedClientByEmail(authentication);
 
     // Convertir los valores de cardType y cardColor a los tipos de enumeración correspondientes
     CardType cardType = CardType.valueOf(createCardDTO.cardType().toUpperCase());
@@ -87,7 +90,7 @@ public class CardServiceImp implements CardService {
     String cardNumber;
     do {
       cardNumber = Utils.generateCardNumber();
-    } while (cardRepository.existsByNumber(cardNumber));
+    } while (existsByNumber(cardNumber));
 
     int ccv = Utils.generateCcv();
     LocalDate fromDate = LocalDate.now();
@@ -95,9 +98,32 @@ public class CardServiceImp implements CardService {
 
     Card newCard = new Card(client, cardType, cardColor, cardNumber, ccv, thruDate, fromDate);
     client.addCard(newCard);
-    clientRepository.save(client);
-    cardRepository.save(newCard);
+    clientService.saveClient(client);
+    saveCard(newCard);
 
     return new ResponseEntity<>("Card created for authenticated client", HttpStatus.CREATED);
+  }
+
+  @Override
+  public Client getAuthenticatedClientByEmail (Authentication authentication) {
+    return clientRepository.findByEmail(authentication.getName());
+  }
+
+  @Override
+  public void saveCard (Card card) {
+    cardRepository.save(card);
+  }
+
+  @Override
+  public boolean existsByNumber (String cardNumber) {
+    return cardRepository.existsByNumber(cardNumber);
+  }
+
+  @Override
+  public List<CardDTO> getCardsByAuthenticatedClient(Client client){
+    return cardRepository.findByClient(client)
+            .stream()
+            .map(CardDTO::new)
+            .collect(toList());
   }
 }

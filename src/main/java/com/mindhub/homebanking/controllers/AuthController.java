@@ -7,6 +7,7 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.ClientService;
 import com.mindhub.homebanking.servicesSecurity.JwtUtilService;
 import com.mindhub.homebanking.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class AuthController {
     @Autowired
     private JwtUtilService jwtUtilService;
 
+    @Autowired
+    private ClientService clientService;
+
     @PostMapping("/login")
     public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO){
         try{
@@ -75,7 +79,7 @@ public class AuthController {
                 registerDTO.lastName(),
                 registerDTO.email(),
                 passwordEncoder.encode(registerDTO.password()));
-        clientRepository.save(client);
+        clientService.saveClient(client);
 
         String accountNumber = Utils.generateAccountNumber();
         Account account = new Account(accountNumber, LocalDate.now(), 0.0);

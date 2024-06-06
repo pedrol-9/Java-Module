@@ -7,7 +7,10 @@ import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.LoanRepository;
 import com.mindhub.homebanking.repositories.TransactionRespository;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
 import com.mindhub.homebanking.services.LoanService;
+import com.mindhub.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +28,13 @@ public class LoanServiceImp implements LoanService {
   private LoanRepository loanRepository;
 
   @Autowired
-  private ClientRepository clientRepository;
+  private ClientService clientService;
 
   @Autowired
-  private AccountRepository accountRepository;
+  private AccountService accountService;
 
   @Autowired
-  private TransactionRespository transactionRepository;
+  private TransactionService transactionService;
 
   @Override
   public ResponseEntity<?> getLoansAvailable() {
@@ -42,10 +45,10 @@ public class LoanServiceImp implements LoanService {
   @Override
   public ResponseEntity<?> createLoanForAuthenticatedClient(Authentication authentication, @RequestBody LoanApplicationDTO loanApplicationDTO) {
 
-    Client client = clientRepository.findByEmail(authentication.getName());
+    Client client = clientService.getActualClient(authentication);
     String username = client.getEmail();
 
-    // Valida que el monto de prestamo sea positivo
+    // Valida que el monto de préstamo sea positivo
     if (loanApplicationDTO.amount() <= 0) {
       return new ResponseEntity<>("Please, check amount entry", HttpStatus.FORBIDDEN);
     }
@@ -73,7 +76,8 @@ public class LoanServiceImp implements LoanService {
     }
 
     // Valida que la cuenta de destino exista
-    Account destinationAccount = accountRepository.findByNumber(loanApplicationDTO.destinationAccount());
+    // Account destinationAccount = accountRepository.findByNumber(loanApplicationDTO.destinationAccount());
+    Account destinationAccount = accountService.getAccountByNumber(loanApplicationDTO.destinationAccount());
     if (destinationAccount == null) {
       return new ResponseEntity<>("Destination account does not exist", HttpStatus.FORBIDDEN);
     }
@@ -93,22 +97,22 @@ public class LoanServiceImp implements LoanService {
     client.addClientLoan(newClientLoan);
 
     // Guardar entidades actualizadas
-    clientRepository.save(client);
+    clientService.saveClient(client);
 
     // Crear y guardar la transacción
     String description = "New loan approved and credited";
     LocalDateTime date = LocalDateTime.now();
     Transaction transaction = new Transaction(TransactionType.CREDIT, loanApplicationDTO.amount(), description, date);
     destinationAccount.addTransaction(transaction);
-    transactionRepository.save(transaction);
+    transactionService.saveTransaction(transaction);
     destinationAccount.setBalance(destinationAccount.getBalance() + loanApplicationDTO.amount());
-    accountRepository.save(destinationAccount);
+    accountService.saveAccount(destinationAccount);
 
     // return new ResponseEntity<>("Loan created and credited to destination account", HttpStatus.CREATED);
     return new ResponseEntity<>("Loan created and credited to destination account", HttpStatus.CREATED);
   }
 
-  private double calculateInterestRate(int payments) {
+  public double calculateInterestRate(int payments) {
     if (payments == 12) {
       return 0.20;
     } else if (payments > 12) {
