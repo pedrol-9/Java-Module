@@ -18,6 +18,8 @@ public interface ClientService {
 
   Client getOptionalClientById(Long id);
 
+  Client getClientByEmail(String email);
+
   Client getActualClient(Authentication authentication);
 
   void saveClient(Client client);

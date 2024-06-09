@@ -3,10 +3,7 @@ package com.mindhub.homebanking.services.Implementation;
 import com.mindhub.homebanking.DTOs.LoanApplicationDTO;
 import com.mindhub.homebanking.DTOs.LoanDTO;
 import com.mindhub.homebanking.models.*;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.LoanRepository;
-import com.mindhub.homebanking.repositories.TransactionRespository;
 import com.mindhub.homebanking.services.AccountService;
 import com.mindhub.homebanking.services.ClientService;
 import com.mindhub.homebanking.services.LoanService;
@@ -93,7 +90,7 @@ public class LoanServiceImp implements LoanService {
     // Crear y configurar el nuevo préstamo con el monto y la tasa de interés
     double amountPlusInterest = loanApplicationDTO.amount() + (loanApplicationDTO.amount() * interestRate);
     ClientLoan newClientLoan = new ClientLoan(amountPlusInterest, loanApplicationDTO.payments());
-    //newClientLoan.setClient(client);
+    newClientLoan.setClient(client); // es necesaria esta línea?
     client.addClientLoan(newClientLoan);
 
     // Guardar entidades actualizadas
@@ -120,6 +117,11 @@ public class LoanServiceImp implements LoanService {
     } else {
       return 0.15;
     }
+  }
+
+  @Override
+  public void saveLoan(Loan loan) {
+    loanRepository.save(loan);
   }
 }
 

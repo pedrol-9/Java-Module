@@ -7,6 +7,7 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.AccountService;
 import com.mindhub.homebanking.services.ClientService;
 import com.mindhub.homebanking.servicesSecurity.JwtUtilService;
 import com.mindhub.homebanking.utils.Utils;
@@ -31,12 +32,6 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private ClientRepository clientRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -47,6 +42,9 @@ public class AuthController {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private AccountService accountService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO){
@@ -62,6 +60,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register (@RequestBody RegisterDTO registerDTO){
+
         if (registerDTO.firstName().isBlank()) {
             return  new ResponseEntity<>("The first name field can't be empty", HttpStatus.FORBIDDEN);
         }
@@ -74,6 +73,16 @@ public class AuthController {
             return  new ResponseEntity<>("The email field can't be empty", HttpStatus.FORBIDDEN);
         }
 
+        //valida que el email del nuevo cliente no exista en la base de datos
+        if(clientService.getClientByEmail(registerDTO.email()) != null){
+            return  new ResponseEntity<>("The email already exists", HttpStatus.FORBIDDEN);
+        }
+
+        //validar que el email contentga @ y.com
+        if (!registerDTO.email().contains("@") || !registerDTO.email().contains(".com")) {
+            return  new ResponseEntity<>("The email must contain @ and .com", HttpStatus.FORBIDDEN);
+        }
+
         Client client = new Client(
                 registerDTO.firstName(),
                 registerDTO.lastName(),
@@ -83,16 +92,16 @@ public class AuthController {
 
         String accountNumber = Utils.generateAccountNumber();
         Account account = new Account(accountNumber, LocalDate.now(), 0.0);
-        // account.setClient(client);
+        account.setClient(client); // es necesaria esta línea?
         client.addAccount(account);
-        accountRepository.save(account);
+        accountService.saveAccount(account);
 
         return new ResponseEntity<>("Client created", HttpStatus.CREATED);
     }
 
     @GetMapping("/current")
     public ResponseEntity<?> getClient(Authentication authentication) {
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.getActualClient(authentication);
         return ResponseEntity.ok(new ClientDTO(client));
     }
 }

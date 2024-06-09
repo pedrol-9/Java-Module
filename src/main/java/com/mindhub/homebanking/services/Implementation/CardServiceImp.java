@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import static java.util.stream.Collectors.toList;
 
@@ -51,6 +51,15 @@ public class CardServiceImp implements CardService {
                                                             @RequestBody CreateCardDTO createCardDTO) {
     // Obtener el cliente actualmente autenticado
     Client client = getAuthenticatedClientByEmail(authentication);
+
+    // Validar que los inputs del usuario no estén vacíos
+    if (createCardDTO.cardType().isBlank()) {
+      return new ResponseEntity<>("Card Type input can't be empty, try again", HttpStatus.FORBIDDEN);
+    }
+
+    if (createCardDTO.cardColor().isBlank()) {
+      return new ResponseEntity<>("Color input can't be empty, try again", HttpStatus.FORBIDDEN);
+    }
 
     // Convertir los valores de cardType y cardColor a los tipos de enumeración correspondientes
     CardType cardType = CardType.valueOf(createCardDTO.cardType().toUpperCase());

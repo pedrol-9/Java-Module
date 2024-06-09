@@ -22,7 +22,7 @@ public class JwtUtilService {
         return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsTFunction) {
+    public <T> T extractClaim(String token, Function<Claims, T> claimsTFunction){
         final Claims claims = extractAllClaims(token);
         return claimsTFunction.apply(claims);
     }

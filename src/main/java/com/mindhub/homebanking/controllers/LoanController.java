@@ -1,10 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.DTOs.LoanApplicationDTO;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.repositories.LoanRepository;
-import com.mindhub.homebanking.repositories.TransactionRespository;
 import com.mindhub.homebanking.services.LoanService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

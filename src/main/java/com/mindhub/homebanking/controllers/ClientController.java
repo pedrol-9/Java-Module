@@ -2,7 +2,6 @@ package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.DTOs.ClientDTO;
 
-import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/clients")
 public class ClientController {
-
     @Autowired
     private ClientService clientService;
 
@@ -28,5 +26,4 @@ public class ClientController {
     public ResponseEntity<ClientDTO> getClient(@PathVariable Long id) {
         return clientService.getClient(id);
     }
-
 }

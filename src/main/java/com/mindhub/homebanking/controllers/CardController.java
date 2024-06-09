@@ -1,8 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.DTOs.CreateCardDTO;
-import com.mindhub.homebanking.repositories.CardRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

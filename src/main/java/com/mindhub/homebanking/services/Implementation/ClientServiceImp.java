@@ -23,12 +23,9 @@ public class ClientServiceImp implements ClientService {
 
   @Override
   public ResponseEntity<List<ClientDTO>> getAllClients(){
-
     /* List<ClientDTO> clientDTOs = clientRepository.findAll().stream().map(ClientDTO::new)
             .collect(toList()); */
-
     List<ClientDTO> clientDTOs = getListClientsDTO();
-
     return new ResponseEntity<>(clientDTOs, HttpStatus.OK);
   }
 
@@ -43,6 +40,11 @@ public class ClientServiceImp implements ClientService {
     ClientDTO clientDTO = new ClientDTO(client);
 
     return new ResponseEntity<>(clientDTO, HttpStatus.OK);
+  }
+
+  @Override
+  public Client getClientByEmail(String email) {
+    return clientRepository.findByEmail(email);
   }
 
   @Override
