@@ -1,4 +1,4 @@
-package com.mindhub.homebanking.controllersTest;
+package com.mindhub.homebanking.RepositoriesTest;
 
 import com.mindhub.homebanking.models.Loan;
 import com.mindhub.homebanking.repositories.LoanRepository;
@@ -12,9 +12,11 @@ import static org.hamcrest.Matchers.*;
 
 import java.util.List;
 
+
+// Estas anotaciones son para testear la base de datos
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class RepositoriesTest {
+public class LoanRepositoryTest {
 
   @Autowired
   LoanRepository loanRepository;

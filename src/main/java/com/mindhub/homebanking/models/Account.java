@@ -75,6 +75,22 @@ public class Account {
         return transactions;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
     // método asignador de trx
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction); //

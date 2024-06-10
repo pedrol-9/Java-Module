@@ -25,7 +25,7 @@ public class Client {
     private boolean admin = false;
 
     @OneToMany(mappedBy="client", fetch= FetchType.EAGER)
-    private Set<Account> accounts = new HashSet<>();
+    private List<Account> accounts = new ArrayList<>();
 
     @OneToMany(mappedBy="client")
     private List<ClientLoan> clientLoans = new ArrayList<>();
@@ -84,11 +84,11 @@ public class Client {
         this.email = email;
     }
 
-    public Set<Account> getAccounts() {
+    public List<Account> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(Set<Account> accounts) {
+    public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
 

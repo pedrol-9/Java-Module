@@ -18,5 +18,7 @@ public interface AccountService {
 
   Account getAccountByNumber(String accountNumber);
 
+  boolean existsByNumber(String accountNumber);
+
   void saveAccount(Account account);
 }

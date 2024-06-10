@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+// Estas anotaciones son usadas para integration tests
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ClienControllerTest {

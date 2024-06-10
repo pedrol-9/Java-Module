@@ -77,4 +77,9 @@ public class AccountServiceImp implements AccountService {
   public void saveAccount(Account account) {
     accountRepository.save(account);
   }
+
+  @Override
+  public boolean existsByNumber(String number) {
+    return accountRepository.existsByNumber(number);
+  }
 }

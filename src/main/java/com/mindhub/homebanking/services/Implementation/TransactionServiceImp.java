@@ -111,6 +111,17 @@ public class TransactionServiceImp implements TransactionService {
     transactionRespository.save(transaction);
   }
 
+  @Override
+  public List<TransactionDTO> getTransactionsByClientAccount(Authentication authentication) {
+    Client client = clientService.getActualClient(authentication);
+
+    return transactionRespository
+            .findByAccountClientId(client.getId())
+            .stream()
+            .map(TransactionDTO::new)
+            .collect(Collectors.toList());
+  }
+
 }
 
 
