@@ -85,14 +85,14 @@ public class CardServiceImp implements CardService {
     // Verificar si el cliente ya tiene tres tarjetas del mismo tipo
     if ((cardType == CardType.DEBIT && debitCardsCount >= 3) ||
             (cardType == CardType.CREDIT && creditCardsCount >= 3)) {
-      return new ResponseEntity<>("Client already has 3 cards of the same type", HttpStatus.FORBIDDEN);
+      return new ResponseEntity<>("You already has 3 cards of the same type", HttpStatus.FORBIDDEN);
     }
 
     // Verificar si el cliente ya tiene una tarjeta del mismo tipo y color
     boolean cardExists = client.getCards().stream()
             .anyMatch(card -> card.getCardType() == cardType && card.getCardColor() == cardColor);
     if (cardExists) {
-      return new ResponseEntity<>("Client already has this card, consider requesting a different one", HttpStatus.FORBIDDEN);
+      return new ResponseEntity<>("You already has this card, consider requesting a different one", HttpStatus.FORBIDDEN);
     }
 
     // Generar un número de tarjeta único

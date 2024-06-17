@@ -21,6 +21,11 @@ public class LoanController {
     return loanService.getLoansAvailable();
   }
 
+  @GetMapping("/current")
+  public ResponseEntity<?> getLoansForAuthenticatedClient(Authentication authentication) {
+    return loanService.getLoansForAuthenticatedClient(authentication);
+  }
+
   @PostMapping("/")
   public ResponseEntity<?> createLoan(Authentication authentication, @RequestBody LoanApplicationDTO loanApplicationDTO) {
     return loanService.createLoanForAuthenticatedClient(authentication, loanApplicationDTO);

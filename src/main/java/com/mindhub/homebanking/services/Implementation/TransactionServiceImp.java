@@ -52,58 +52,64 @@ public class TransactionServiceImp implements TransactionService {
 
   @Override
   public ResponseEntity<String> makeTransaction(Authentication authentication, @RequestBody NewTransactionDTO newTransactionDTO) {
-    // Obtiene el cliente autenticado
-    // authentication = SecurityContextHolder.getContext().getAuthentication();
+    // Obtener el cliente autenticado
     String username = authentication.getName();
     Client client = clientService.getActualClient(authentication);
 
-    // Valida que los datos de la solicitud no estén vacíos
+    // Validar que los datos de la solicitud no estén vacíos
     if (newTransactionDTO.amount() == 0 || newTransactionDTO.description().isBlank() ||
             newTransactionDTO.sourceAccountNumber().isEmpty() || newTransactionDTO.destinationAccountNumber().isEmpty()) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Empty fields, try again");
     }
 
-    // Valida que la cuenta de origen y destino sean diferentes
+    // Validar que la cuenta de origen y destino sean diferentes
     if (newTransactionDTO.sourceAccountNumber().equals(newTransactionDTO.destinationAccountNumber())) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Source account cannot be the same as destination account");
     }
 
-    // Obtiene las cuentas de origen y destino
+    // Obtener las cuentas de origen y destino
     Account sourceAccount = accountService.getAccountByNumber(newTransactionDTO.sourceAccountNumber());
     Account destinationAccount = accountService.getAccountByNumber(newTransactionDTO.destinationAccountNumber());
 
-    // Valida que las cuentas existan
-    if (sourceAccount == null || destinationAccount == null) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Source or destination account does not exist");
+    // Validar que las cuentas existan
+    if (sourceAccount == null) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Source account does not exist");
     }
 
-    // Valida que la cuenta de origen pertenezca al cliente autenticado
+    if (destinationAccount == null) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("destination account does not exist");
+    }
+
+    // Validar que la cuenta de origen pertenezca al cliente autenticado
     if (!sourceAccount.getClient().equals(client)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Source account does not belong to authenticated client");
     }
 
-    // Valida que el cliente tenga suficientes fondos (en caso de ser una transacción de débito)
-    if (sourceAccount.getBalance() < newTransactionDTO.amount()) {
+    // Validar suficientes fondos (en caso de ser una transacción de débito)
+    if (newTransactionDTO.amount() > 0 && sourceAccount.getBalance() < newTransactionDTO.amount()) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Insufficient funds");
     }
 
-    // Realiza la transacción
-    Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -newTransactionDTO.amount(), newTransactionDTO.description(), LocalDateTime.now());
-    sourceAccount.addTransaction(debitTransaction);
-    transactionRespository.save(debitTransaction);
-    // Actualiza el saldo de la cuenta de origen (en caso de ser una transacción de débito)
-    sourceAccount.setBalance(sourceAccount.getBalance() - newTransactionDTO.amount());
-    accountService.saveAccount(sourceAccount);
+    // Realizar la transacción
+    try {
+      // Transacción de débito
+      Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -newTransactionDTO.amount(), newTransactionDTO.description(), LocalDateTime.now());
+      sourceAccount.addTransaction(debitTransaction);
+      transactionRespository.save(debitTransaction);
+      sourceAccount.setBalance(sourceAccount.getBalance() - newTransactionDTO.amount());
+      accountService.saveAccount(sourceAccount);
 
-    // Realiza la transacción inversa (en caso de ser una transacción de débito)
-    Transaction creditTransaction = new Transaction(TransactionType.CREDIT, newTransactionDTO.amount(), newTransactionDTO.description(), LocalDateTime.now());
-    destinationAccount.addTransaction(creditTransaction);
-    transactionRespository.save(creditTransaction);
-    // Actualiza el saldo de la cuenta de origen (en caso de ser una transacción de débito)
-    destinationAccount.setBalance(destinationAccount.getBalance() + newTransactionDTO.amount());
-    accountService.saveAccount(destinationAccount);
+      // Transacción de crédito
+      Transaction creditTransaction = new Transaction(TransactionType.CREDIT, newTransactionDTO.amount(), newTransactionDTO.description(), LocalDateTime.now());
+      destinationAccount.addTransaction(creditTransaction);
+      transactionRespository.save(creditTransaction);
+      destinationAccount.setBalance(destinationAccount.getBalance() + newTransactionDTO.amount());
+      accountService.saveAccount(destinationAccount);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body("Transaction successful");
+      return ResponseEntity.status(HttpStatus.CREATED).body("Transaction successful");
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process transaction");
+    }
   }
 
   @Override
@@ -123,5 +129,61 @@ public class TransactionServiceImp implements TransactionService {
   }
 
 }
+
+/*@Override
+public ResponseEntity<String> makeTransaction(Authentication authentication, @RequestBody NewTransactionDTO newTransactionDTO) {
+  // Obtiene el cliente autenticado
+  // authentication = SecurityContextHolder.getContext().getAuthentication();
+  String username = authentication.getName();
+  Client client = clientService.getActualClient(authentication);
+
+  // Valida que los datos de la solicitud no estén vacíos
+  if (newTransactionDTO.amount() == 0 || newTransactionDTO.description().isBlank() ||
+          newTransactionDTO.sourceAccountNumber().isEmpty() || newTransactionDTO.destinationAccountNumber().isEmpty()) {
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Empty fields, try again");
+  }
+
+  // Valida que la cuenta de origen y destino sean diferentes
+  if (newTransactionDTO.sourceAccountNumber().equals(newTransactionDTO.destinationAccountNumber())) {
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Source account cannot be the same as destination account");
+  }
+
+  // Obtiene las cuentas de origen y destino
+  Account sourceAccount = accountService.getAccountByNumber(newTransactionDTO.sourceAccountNumber());
+  Account destinationAccount = accountService.getAccountByNumber(newTransactionDTO.destinationAccountNumber());
+
+  // Valida que las cuentas existan
+  if (sourceAccount == null || destinationAccount == null) {
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Source or destination account does not exist");
+  }
+
+  // Valida que la cuenta de origen pertenezca al cliente autenticado
+  if (!sourceAccount.getClient().equals(client)) {
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Source account does not belong to authenticated client");
+  }
+
+  // Valida que el cliente tenga suficientes fondos (en caso de ser una transacción de débito)
+  if (sourceAccount.getBalance() < newTransactionDTO.amount()) {
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Insufficient funds");
+  }
+
+  // Realiza la transacción
+  Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -newTransactionDTO.amount(), newTransactionDTO.description(), LocalDateTime.now());
+  sourceAccount.addTransaction(debitTransaction);
+  transactionRespository.save(debitTransaction);
+  // Actualiza el saldo de la cuenta de origen (en caso de ser una transacción de débito)
+  sourceAccount.setBalance(sourceAccount.getBalance() - newTransactionDTO.amount());
+  accountService.saveAccount(sourceAccount);
+
+  // Realiza la transacción inversa (en caso de ser una transacción de débito)
+  Transaction creditTransaction = new Transaction(TransactionType.CREDIT, newTransactionDTO.amount(), newTransactionDTO.description(), LocalDateTime.now());
+  destinationAccount.addTransaction(creditTransaction);
+  transactionRespository.save(creditTransaction);
+  // Actualiza el saldo de la cuenta de origen (en caso de ser una transacción de débito)
+  destinationAccount.setBalance(destinationAccount.getBalance() + newTransactionDTO.amount());
+  accountService.saveAccount(destinationAccount);
+
+  return ResponseEntity.status(HttpStatus.CREATED).body("Transaction successful");
+}*/
 
 

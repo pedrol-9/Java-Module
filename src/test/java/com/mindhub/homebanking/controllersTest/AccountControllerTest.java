@@ -28,16 +28,17 @@ public class AccountControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  // test de getByNumber
-//  @Test
-//  public void accountNumberIsNotNull() {
-//    String accountNumber = Utils.generateAccountNumber();
-//    assertThat(accountNumber, is(notNullValue()));
-//  }
+   // test de getByNumber
+  @Test
+  public void accountNumberIsNotNull() {
+    String accountNumber = Utils.generateAccountNumber();
+    assertThat(accountNumber, is(notNullValue()));
+  }
 
 //  @Test
 //  public void canCreateAccountOk() throws Exception {
 //
+//    Account account = new Account();
 //    mockMvc.perform(
 //            post("/api/clients/current/accounts")
 //                    .contentType("application/json")

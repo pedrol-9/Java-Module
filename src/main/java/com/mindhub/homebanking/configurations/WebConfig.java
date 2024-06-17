@@ -39,11 +39,15 @@ public class WebConfig {
 
             .authorizeHttpRequests(authorize ->
                     authorize
-                            .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/me", "/h2-console/**").permitAll()
-                            .requestMatchers("/api/clients/current/accounts", "/api/clients/current/cards", "/api/clients/current/transactions", "/api/loans").hasAnyRole("CLIENT", "ADMIN")
-                            .requestMatchers("/api/clients/**", "/api/clients/current").hasRole("ADMIN")
+                            .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/current", "/h2-console/**").permitAll()
+                            .requestMatchers("/api/clients/current/accounts", "/api/clients/accounts/{id}", "/api/clients/current/cards", "/api/clients/current/transactions", "/api/loans").hasAnyRole("CLIENT", "ADMIN")
+                            .requestMatchers("/api/clients/**").hasRole("ADMIN")
                             .anyRequest().authenticated()
             )
+            /*.authorizeHttpRequests(authorize ->
+                    authorize
+                            .anyRequest().permitAll() // Permitir acceso sin autenticación ni autorización a todas las rutas
+            )*/
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             );

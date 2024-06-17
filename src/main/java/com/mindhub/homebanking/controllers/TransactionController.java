@@ -2,9 +2,6 @@ package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.DTOs.NewTransactionDTO;
 import com.mindhub.homebanking.DTOs.TransactionDTO;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.repositories.TransactionRespository;
 import com.mindhub.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

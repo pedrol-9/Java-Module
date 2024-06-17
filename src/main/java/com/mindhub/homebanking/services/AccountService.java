@@ -18,6 +18,8 @@ public interface AccountService {
 
   Account getAccountByNumber(String accountNumber);
 
+  Account getAccountById(Long id);
+
   boolean existsByNumber(String accountNumber);
 
   void saveAccount(Account account);

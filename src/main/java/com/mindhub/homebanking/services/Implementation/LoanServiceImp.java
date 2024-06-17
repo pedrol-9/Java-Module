@@ -3,6 +3,7 @@ package com.mindhub.homebanking.services.Implementation;
 import com.mindhub.homebanking.DTOs.LoanApplicationDTO;
 import com.mindhub.homebanking.DTOs.LoanDTO;
 import com.mindhub.homebanking.models.*;
+import com.mindhub.homebanking.repositories.ClientLoanRepository;
 import com.mindhub.homebanking.repositories.LoanRepository;
 import com.mindhub.homebanking.services.AccountService;
 import com.mindhub.homebanking.services.ClientService;
@@ -33,10 +34,20 @@ public class LoanServiceImp implements LoanService {
   @Autowired
   private TransactionService transactionService;
 
+  @Autowired
+  private ClientLoanRepository clientLoanRepository;
+
   @Override
   public ResponseEntity<?> getLoansAvailable() {
     List<LoanDTO> loans = loanRepository.findAll().stream().map(LoanDTO::new).toList();
     return new ResponseEntity<>(loans, HttpStatus.OK);
+  }
+
+  // obtener los loans dell cliente autenticado
+  @Override
+  public ResponseEntity<?> getLoansForAuthenticatedClient(Authentication authentication) {
+    Client client = clientService.getActualClient(authentication);
+    return new ResponseEntity<>(client.getLoans(), HttpStatus.OK);
   }
 
   @Override
@@ -90,7 +101,8 @@ public class LoanServiceImp implements LoanService {
     // Crear y configurar el nuevo préstamo con el monto y la tasa de interés
     double amountPlusInterest = loanApplicationDTO.amount() + (loanApplicationDTO.amount() * interestRate);
     ClientLoan newClientLoan = new ClientLoan(amountPlusInterest, loanApplicationDTO.payments());
-    newClientLoan.setClient(client); // es necesaria esta línea?
+    newClientLoan.setClient(client);
+    newClientLoan.setLoan(loan);
     client.addClientLoan(newClientLoan);
 
     // Guardar entidades actualizadas
@@ -104,6 +116,7 @@ public class LoanServiceImp implements LoanService {
     transactionService.saveTransaction(transaction);
     destinationAccount.setBalance(destinationAccount.getBalance() + loanApplicationDTO.amount());
     accountService.saveAccount(destinationAccount);
+    clientLoanRepository.save(newClientLoan);
 
     // return new ResponseEntity<>("Loan created and credited to destination account", HttpStatus.CREATED);
     return new ResponseEntity<>("Loan created and credited to destination account", HttpStatus.CREATED);

@@ -40,7 +40,7 @@ public class AccountServiceImp implements AccountService {
       return new ResponseEntity<>(accountsDtoList, HttpStatus.OK);
     }
 
-    return new ResponseEntity<>("Client has no accounts", HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>("You have no accounts", HttpStatus.NOT_FOUND);
   }
 
   public ResponseEntity<?> createAccountForAuthenticatedClient(Authentication authentication) {
@@ -49,7 +49,7 @@ public class AccountServiceImp implements AccountService {
 
     // Verificar si el cliente ya tiene 3 cuentas
     if (client.getAccounts().size() >= 3) {
-      return new ResponseEntity<>("Client already has 3 accounts", HttpStatus.FORBIDDEN);
+      return new ResponseEntity<>("You already has 3 accounts", HttpStatus.FORBIDDEN);
     }
 
     // Crear una nueva cuenta para el cliente
@@ -58,7 +58,7 @@ public class AccountServiceImp implements AccountService {
     client.addAccount(newAccount);
     saveAccount(newAccount);
 
-    return new ResponseEntity<>("Account created for authenticated client", HttpStatus.CREATED);
+    return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
   }
 
   @Override
@@ -71,6 +71,12 @@ public class AccountServiceImp implements AccountService {
   @Override
   public Account getAccountByNumber(String number) {
     return accountRepository.findByNumber(number);
+  }
+
+  @Override
+  public Account getAccountById(Long id) {
+    // Implementar lógica para buscar la cuenta por su ID en el repositorio
+    return accountRepository.findById(id).orElse(null);
   }
 
   @Override
