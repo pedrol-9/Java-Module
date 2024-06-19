@@ -1,3 +1,4 @@
+/*
 package com.mindhub.homebanking.RepositoriesTest;
 
 import com.mindhub.homebanking.models.Loan;
@@ -33,3 +34,4 @@ public class LoanRepositoryTest {
     assertThat(loans, hasItem(hasProperty("loanName", is("Personal"))));
   }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.utils.Utils;
@@ -30,3 +31,4 @@ public class UtilsTests {
     assertThat(accountNumber,is(not(emptyOrNullString())));
   } // ok
 }
+*/

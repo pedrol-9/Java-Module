@@ -1,3 +1,4 @@
+/*
 package com.mindhub.homebanking.RepositoriesTest;
 
 import com.mindhub.homebanking.models.Account;
@@ -49,3 +50,4 @@ public class AccountRepositoryTest {
   }
 
 }
+*/

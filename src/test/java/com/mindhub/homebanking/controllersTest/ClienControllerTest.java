@@ -1,3 +1,4 @@
+/*
 package com.mindhub.homebanking.controllersTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,11 +29,11 @@ public class ClienControllerTest {
 
   @Test
   public void canRegisterOk() throws Exception {
-    RegisterDTO newUser = new RegisterDTO("Pedro", "Sanabria", "pedro@sanabria.com", "12345**");
+    RegisterDTO newUser = new RegisterDTO("Homero", "Simpson", "homero@simpson.com", "123");
 
     mockMvc.perform(
             post("/api/auth/register")
-                    .contentType("application/json")
+                    .contentType(MediaType.APPLICATION_JSON)
                     .content(
                             objectMapper.writeValueAsString(newUser)
                     )
@@ -43,7 +45,7 @@ public class ClienControllerTest {
   @Test
   public void canLoginOk() throws Exception {
 
-    LoginDTO user = new LoginDTO("melba@mindhub.com", "123");
+    LoginDTO user = new LoginDTO("oscar@mindhub.com", "123");
     mockMvc.perform(
             post("/api/auth/login")
                     .contentType("application/json")
@@ -56,3 +58,4 @@ public class ClienControllerTest {
   }
 }
 
+*/

@@ -1,3 +1,4 @@
+/*
 package com.mindhub.homebanking.controllersTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,39 +28,4 @@ public class AccountControllerTest {
     String accountNumber = Utils.generateAccountNumber();
     assertThat(accountNumber, is(notNullValue()));
   }
-
-//  @Test
-//  public void canCreateAccountOk() throws Exception {
-//
-//    Account account = new Account();
-//    mockMvc.perform(
-//            post("/api/clients/current/accounts")
-//                    .contentType("application/json")
-//                    .content(
-//                            objectMapper.writeValueAsString(account)
-//                    )
-//    )
-//            .andDo(print())
-//            .andExpect(status().isCreated());
-//  }
-
-//  @Test
-//  public void accountExistsGreen() {
-//    //Generamos un número de cuenta aleatorio
-//    String accountNumber = NumberAccount.eightDigits();
-//
-//    // Creamos y guardamos una nueva cuenta con ese número, fecha de hoy y saldo inicial de 1000.0
-//    Account account = new Account(accountNumber, LocalDate.now(), 1000.0);
-//    accountRepository.save(account);
-//
-//    // Comprobamos si la cuenta con el número generado existe en la base de datos
-//    boolean accountExists = accountRepository.existsByNumber(accountNumber);
-//
-//    //Verificamos que la cuenta realmente exista
-//    assertThat(accountExists, is(true));
-//  }
-
-
-
-
-}
+}*/

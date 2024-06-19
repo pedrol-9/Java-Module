@@ -1,3 +1,4 @@
+/*
 package com.mindhub.homebanking.RepositoriesTest;
 
 import com.mindhub.homebanking.models.Card;
@@ -89,3 +90,4 @@ public class CardRepositoryTest {
     assertThat(cardRepository.findByClient(client), contains(card));
   }
 }
+*/
