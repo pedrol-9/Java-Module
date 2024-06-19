@@ -160,6 +160,7 @@ public class HomebankingApplication {
 
 			 List<Client> mortgageLoanClients = mortgageLoan.getClients();
 			 System.out.println(mortgageLoanClients);
+
 		};
 	}
 }
