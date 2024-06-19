@@ -18,10 +18,12 @@ public class JwtUtilService {
 
     private static final long EXPIRATION_TOKEN = 1000 * 60 * 60;
 
+    // este metodo se utiliza en el JwtRequestFilter para extraer la payloadde la peticion
     public Claims extractAllClaims(String token){
         return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
     }
 
+    // este metodo se utiliza en el JwtRequestFilter para extraer claims específicos del payload
     public <T> T extractClaim(String token, Function<Claims, T> claimsTFunction){
         final Claims claims = extractAllClaims(token);
         return claimsTFunction.apply(claims);
@@ -47,8 +49,8 @@ public class JwtUtilService {
 
     public String generateToken(UserDetails userDetails){
         Map<String, Object> claims = new HashMap<>();
-        String rol = userDetails.getAuthorities().iterator().next().getAuthority();
-        claims.put("rol", rol);
+        String role = userDetails.getAuthorities().iterator().next().getAuthority();
+        claims.put("role", role);
         return createToken(claims, userDetails.getUsername());
     }
 }

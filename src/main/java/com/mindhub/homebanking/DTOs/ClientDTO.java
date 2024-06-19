@@ -26,11 +26,14 @@ public class ClientDTO {
 
     private List<CardDTO> cards;
 
+    private boolean admin;
+
     public ClientDTO(Client client) {
         this.id = client.getId();
         this.firstName = client.getFirstName();
         this.lastName = client.getLastName();
         this.email = client.getEmail();
+        this.admin = client.isAdmin();
         this.accounts = client.getAccounts().stream()
                 .map(AccountDTO::new)
                 .collect(Collectors.toSet());
@@ -70,5 +73,9 @@ public class ClientDTO {
 
     public List<CardDTO> getCards() {
         return cards;
+    }
+
+    public boolean isAdmin() {
+        return admin;
     }
 }

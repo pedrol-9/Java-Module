@@ -26,9 +26,6 @@ public class AccountServiceImp implements AccountService {
   public AccountRepository accountRepository;
 
   @Autowired
-  public ClientRepository clientRepository;
-
-  @Autowired
   public ClientService clientService;
 
   @Override
